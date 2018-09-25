@@ -27,13 +27,13 @@ main{
   left: 0;
 
   transition: .5s;
-  background-color: #FFF9C4;
+  background-color: #000000;
   z-index: 1;
   margin-left: -15em;
 }
 
 .showbar .sidebar{
-  margin-left: 0;  
+  margin-left: 0;
 }
 
 .showbar main{
@@ -44,6 +44,7 @@ main{
   font-size: 2.5em;
   font-family: 'Roboto', sans-serif;
   text-align: center;
+  color: white;
 }
 
 .sidebar .list{
@@ -53,6 +54,7 @@ main{
   align-items: center;
   justify-content: center;
   font-family: 'Roboto', sans-serif;
+  color: white;
 }
 
 .sidebar .list img{
@@ -61,5 +63,5 @@ main{
 }
 
 .sidebar .list:hover{
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: #ff8f00;
 }
