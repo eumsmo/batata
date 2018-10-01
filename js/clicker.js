@@ -1,18 +1,16 @@
-let clicker, upgrades;
-
 class Upgrades {
   constructor(){
     this.upgrades = [
       {
         nome: "Hello, World!",
-        preco: "10b",
+        preco: 10,
         descricao: "primeiro upgrade",
         modificadores: {batatasPSec: 0.1},
         liberar: ["Agora ta chato"]
       },
       {
         nome: "Agora ta chato",
-        preco: "100b",
+        preco: 100,
         descricao: "segundo upgrade",
         modificadores: {batatasPSec: 0.1},
         liberar: []
@@ -26,13 +24,31 @@ class Upgrades {
         return upgrade;
   }
 
-  convertPreco(preco){
-    
+  aplicarModificador(clicker,modificador,valor){
+    if(typeof modificador === "number")
+      return clicker.status[modificador] = clicker.status[modificador]? clicker.status[modificador]+valor:valor;
+
+    if(typeof modificador === "string"){
+
+    }
+  }
+
+  ativarUpgrade(clicker,upgrade){
+    let status = clicker.status;
+    for (var modificador in upgrade.modificadores) {
+
+    }
   }
 
   comprar(clicker,nome){
     let upgrade = this.getUpgrade(nome);
-    if(clicker.status.batatas>=upgrade)
+    if(clicker.status.batatas>=upgrade.preco){
+      clicker.status.batatas-=upgrade.preco;
+      clicker.mostrarPontos();
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 
@@ -43,13 +59,20 @@ class BatataClicker {
 
     this.dom = {};
     this.dom.batataClick = document.querySelector("#batata-click");
-    this.dom.batataClick.addEventListener("click",function(){this.mostrarPontos()}.bind(this));
+    this.dom.batataClick.addEventListener("click",this.adicionarBatata.bind(this));
+  }
+
+  adicionarBatata(){
+    this.status.batatas++;
+    this.mostrarPontos();
   }
 
   mostrarPontos(){
-    this.status.batatas++;
     console.log(this.status.batatas);
   }
+
+
 }
 
-(new BatataClicker());
+let clicker = new BatataClicker(),
+    upgrades = new Upgrades();
