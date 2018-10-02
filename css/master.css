@@ -13,12 +13,13 @@ main{
   background-color: white;
   box-sizing: content-box;
   overflow-x: auto;
-  font-family: cursive;
+  font-family: 'Mali', cursive;
   margin: 15px;
 
   transition: .5s;
   z-index: 1;
-  padding-left: 10px;
+  padding-left: 15% ;
+  padding-right: 15%;
 }
 h1{
   text-align: center;
@@ -27,8 +28,23 @@ h1{
 p{
   font-size: 18px;
   padding: 0.5em;
-  
 }
+.img_esq{
+  display: inline;
+}
+.list{
+  margin-left: 50px;
+}
+
+.receita{
+  float: right;
+
+}
+.receita_e{
+  float: left;
+  clear: both;
+}
+/*----------*/
 .sidebar{
   width: 15em;
   height: 100%;
