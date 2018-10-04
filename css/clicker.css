@@ -12,6 +12,7 @@ body{
   grid-template-rows: 20% 20% 20% 20% 20%;*/
   width: 100vw;
   height: 100vw;
+  background-color: #793910;
 }
 
 .terra{
@@ -25,13 +26,16 @@ body{
   background-color: #793910;
 }
 
-.terra.plantado::after{
-  content: '';
+.fundo_terra{
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url(../img/potatoes.png);
-  background-size: contain;
-  background-repeat: no-repeat;
+  z-index: 0;
+}
 
+.plantado .batata{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
