@@ -2,17 +2,68 @@ body{
     margin: 0;
 }
 
-#batata-click{
-  width: 20em;
+html, body{
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+main{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
 }
 
 #farm{
   display: grid;
 /*  grid-template-columns: 20% 20% 20% 20% 20%;
   grid-template-rows: 20% 20% 20% 20% 20%;*/
-  width: 100vw;
-  height: 100vw;
   background-color: #793910;
+  box-sizing: border-box;
+}
+
+#select{
+  background-color: grey;
+}
+
+#select header{
+  width: 100%;
+  height: 30%;
+  background-color: #399ac5;
+}
+
+@media (orientation: portrait){
+  main{
+    flex-direction: column;
+  }
+  #farm{
+    width: 100vw;
+    height: 100vw;
+  }
+  #select{
+    width: 100vw;
+    height: 30vw;
+  }
+}
+
+@media (orientation: landscape){
+  main{
+    flex-direction: row;
+    /*padding: 0 5%;*/
+  }
+  #farm{
+    width: 100vh;
+    height: 100vh;
+  }
+  #select{
+    width: 30%;
+    max-width: 300px;
+    height: 100vh;
+  }
 }
 
 .terra{
@@ -26,16 +77,76 @@ body{
   background-color: #793910;
 }
 
-.fundo_terra{
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
+
+.terra .batata{
+  opacity: 0;
 }
 
 .plantado .batata{
+  opacity: 1;
+}
+
+.batata{
   position: absolute;
   width: 100%;
   height: 100%;
   z-index: 1;
+}
+
+.terra:hover::after{
+  content: '';
+  position: absolute;;
+  width: 100%;
+  height: 100%;
+  border: 1px dashed #03a9f44f;
+  z-index: 2;
+  box-sizing: border-box;
+}
+/*:not(.plantado)*/
+.terra:hover{
+  transform: scale(1.1);
+  z-index: 1;
+  filter: brightness(1.02);
+}
+
+.terra.plantado:hover{
+  filter: grayscale(1);
+}
+
+.plantado .barra{
+  width: 80%;
+  margin-left: 10%;
+  height: 10%;
+  background-color: #505050;
+  border: 1px solid #484848;
+  box-sizing: border-box;
+  z-index: 9;
+  content: '';
+  position: absolute;
+  bottom: 15%;
+}
+
+.plantado .progresso{
+  position: absolute;
+  width: 0%;
+  height: 100%;
+  content: '';
+  background-color: blue;
+}
+
+.indicador{
+  display: none;
+}
+
+.plantado .indicador{
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  top: -50%;
+  font-size: 1.25em;
+  font-weight: bold;
+  font-family: monospace;
+  color: white;
 }
