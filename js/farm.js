@@ -1,14 +1,24 @@
+// Esse codigo depende do template.js
 const Img_batata_folder = "img/";
 const Terra = "";
 const InfoBatatas = {
   "simples": {
     "img": "potatoes.png",
-    "preco": 5,
-    "tempo": 4
+    "preco": 1,
+    "armazenamento": 1,
+    "tempo": 10
   },
   "test": {
     "img": "potato.png",
-    "preco": 15
+    "preco": 15,
+    "armazenamento": 3,
+    "tempo": 30
+  },
+  "testa": {
+    "img": "potato.png",
+    "preco": 30,
+    "armazenamento": 10,
+    "tempo": 60
   }
 };
 function msToTime(duration) {
@@ -40,7 +50,6 @@ class Batata{
     };
   }
 }
-
 class Farm{
   constructor(){
     this.arr = [];
@@ -48,7 +57,9 @@ class Farm{
     this.grids = [];
     this.xSize;
     this.ySize;
+
     this.farmEl = document.querySelector("#farm");
+    this.terra_template = new Template("#terra_template");
 
     tempo.add(this.updateTime.bind(this));
   }
@@ -67,7 +78,6 @@ class Farm{
         } else if(el.classList.contains("plantado")){
             el.classList.remove("plantado");
             img.src="";
-            console.log(img);
         }
       }
   }
@@ -81,30 +91,11 @@ class Farm{
     for(let i=0;i<x;i++){
       this.grids[i] = [];
       for(let j=0;j<y;j++){
-        let span = document.createElement("span"),
-            indicador = document.createElement("span"),
-            progresso = document.createElement("span"),
-            barra = document.createElement("span"),
-            img_batata = new Image();
+        let el = this.terra_template.render({x:i,y:j});
 
-        span.classList.add("terra");
-        span.dataset.x = i;
-        span.dataset.y = j;
-        span.addEventListener('click',this.clickEvent.bind(this));
-
-        indicador.innerHTML = "00:00:04";
-
-        img_batata.classList.add("batata");
-        indicador.classList.add("indicador");
-        progresso.classList.add("progresso");
-        barra.classList.add("barra");
-
-        barra.appendChild(progresso);
-        barra.appendChild(indicador);
-        span.appendChild(img_batata);
-        span.appendChild(barra);
-        this.grids[i][j] = span;
-        this.farmEl.append(span);
+        el.addEventListener('click',this.clickEvent.bind(this));
+        this.grids[i][j] = el;
+        this.farmEl.append(el);
       }
     }
 
@@ -115,9 +106,13 @@ class Farm{
   clickEvent(evt){
     let el = evt.currentTarget,
         i = el.dataset.x,
-        j = el.dataset.y;
+        j = el.dataset.y,
+        grid = this.arr[i][j];
 
-    this.addBatata(i,j);
+    if(!grid)
+      this.addBatata(i,j);
+    else if(grid.pronta)
+      this.collectBatata(i,j);
   }
   fill(x,y){
     this.xSize = x;
@@ -167,6 +162,13 @@ class Farm{
       return true;
     }
   }
+  collectBatata(i,j){
+    let batata = this.arr[i][j];
+    if(batata.pronta){
+      user.collect(batata);
+      this.removeBatata(i,j);
+    }
+  }
   updateProgress(time,i,j){
     let mainEl = this.grids[i][j],
         progressEl = mainEl.querySelector(".progresso"),
@@ -178,6 +180,16 @@ class Farm{
     indicadorEl.innerHTML = msToTime(time.final-time.inicial-time.progresso);
     //console.log(mainEl,progressEl,indicadorEl);
   }
+
+  setReady(i,j){
+    let mainEl = this.grids[i][j],
+        indicadorEl = mainEl.querySelector(".indicador");
+    console.log("ready!");
+    if(this.arr[i][j].pronta){
+      indicadorEl.innerHTML = "Pronto!";
+    }
+  }
+
   updateTime(stop){
     let that = this;
     let agora = Date.now();
@@ -187,15 +199,15 @@ class Farm{
         tempo.progresso = agora-tempo.inicial;
         if(tempo.progresso>=tempo.final_relativa){
           el.pronta = true;
-          console.log("ready");
+          that.setReady(i,j);
         } else {
           this.updateProgress(tempo,i,j);
         }
       }
     }.bind(this));
   }
-}
 
+}
 class Tempo {
   constructor(every){
     this.callbacks=[];
@@ -228,11 +240,19 @@ class Tempo {
     this.loop();
   }
 }
-
 class User{
   constructor(){
     this.money = 0;
+    this.armazenamento = 0;
+    this.armazenamentoMax = 1000;
     this.selected = "none";
+
+    this.info_batata_template = new Template("#info_batata_template");
+    this.info_holder = document.querySelector("#batatas");
+    this.selectedSpanEl = document.querySelector("#batata_selecionada");
+    this.selectedImgEl = document.querySelector("#img_selecionada");
+
+    this.generateInfo();
   }
 
   hasSelected(){
@@ -241,6 +261,16 @@ class User{
 
   select(tipo){
     this.selected = tipo;
+    if(tipo!='none'){
+      this.selectedSpanEl.innerHTML = `(${tipo})`;
+      this.selectedImgEl.style.display = "block";
+      this.selectedImgEl.src = Img_batata_folder+'/'+InfoBatatas[tipo].img;
+    }
+    else{
+      this.selectedSpanEl.innerHTML = "(nada)";  
+      this.selectedImgEl.src = "";
+      this.selectedImgEl.style.display = "none";
+    }
   }
 
   buy(){
@@ -249,6 +279,27 @@ class User{
       this.money-=tipo.preco;
       return true;
     } else return false;
+  }
+  collect(batata){
+    let quant = InfoBatatas[batata.tipo].armazenamento;
+    this.armazenamento+=quant;
+    batata.tipo = "none";
+  }
+
+  generateInfo(){
+    let el;
+    for (let batata in InfoBatatas){
+      el  = this.info_batata_template.render(InfoBatatas[batata],{nome: batata});
+      el.addEventListener("click",function(){
+        this.select(batata);
+      }.bind(this));
+      this.info_holder.appendChild(el);
+    }
+
+    el = document.querySelector("#select footer img");
+    el.addEventListener("click",function(){
+      this.select("none");
+    }.bind(this));
   }
 }
 

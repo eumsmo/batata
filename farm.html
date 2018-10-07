@@ -13,10 +13,43 @@
       </div>
       <div id="select">
         <header>
-          <span>Reals: 1</span>
         </header>
+        <main>
+          <section id="batatas">
+
+          </section>
+        </main>
+        <footer>
+          <img src="img/potatoes.png" id="img_selecionada">
+          <div class="">
+            <span>Selecionado</span>
+            <span id="batata_selecionada">(simples)</span>
+          </div>
+        </footer>
       </div>
     </main>
+
+    <template id="terra_template">
+      <span class="terra" data-x="${x}" data-y="${y}">
+        <img class="batata">
+        <span class="barra">
+          <span class="progresso"></span>
+          <span class="indicador"></span>
+        </span>
+      </span>
+    </template>
+
+    <template id="info_batata_template">
+      <div class="info_batata">
+        <img src="img/${img}" alt="Batatas comuns">
+        <div class="informacao">
+          <h2>${nome}</h2>
+          <p>Preço: ${preco} real(s)</p>
+          <p>Armazenamento: ${armazenamento} batata(s)</p>
+        </div>
+      </div>
+    </template>
+    <script src="js/template.js" charset="utf-8"></script>
     <script src="js/farm.js" charset="utf-8"></script>
   </body>
 </html>

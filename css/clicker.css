@@ -9,7 +9,7 @@ html, body{
   overflow: hidden;
 }
 
-main{
+body > main{
   width: 100%;
   height: 100%;
   display: flex;
@@ -28,12 +28,15 @@ main{
 
 #select{
   background-color: grey;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-#select header{
+#select main{
   width: 100%;
-  height: 30%;
-  background-color: #399ac5;
+  height: 70%;
+  overflow: auto;
 }
 
 @media (orientation: portrait){
@@ -46,7 +49,8 @@ main{
   }
   #select{
     width: 100vw;
-    height: 30vw;
+    max-height: 30vw;
+    flex-direction: column;
   }
 }
 
@@ -63,6 +67,7 @@ main{
     width: 30%;
     max-width: 300px;
     height: 100vh;
+    flex-direction: row;
   }
 }
 
@@ -145,8 +150,89 @@ main{
   height: 100%;
   text-align: center;
   top: -50%;
-  font-size: 1.25em;
+  font-size: 75%;
   font-weight: bold;
   font-family: monospace;
   color: white;
+}
+
+.info_batata img,#select footer img{
+  width: 3em;
+  border: 5px solid grey;
+  position: absolute;
+  left: 10px;
+  margin-left: 0;
+  box-sizing: border-box;
+
+  background-image: url(../img/dirt.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  box-sizing: content-box;
+  background-color: #793910;
+}
+
+.info_batata .informacao h2{
+  display: inline;
+  margin-top: 0;
+  margin-left: 0;
+}
+
+.info_batata{
+  position: relative;
+  width: 100%;
+  height: 100px;
+  background-color: #939393;
+
+  padding: 10px;
+  box-sizing: border-box;
+  border: 2.5px inset #646464;
+}
+
+.info_batata:hover{
+  filter: brightness(0.9);
+}
+
+.info_batata .informacao{
+  display: block;
+  margin-left: 4.5em;
+}
+
+.info_batata .informacao p{
+  margin: 0;
+}
+
+.info_batata.selecionado img{
+  border-color: #4d7f4e;
+}
+
+#select footer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+}
+
+#select footer img{
+  width: 2em;
+  height: 2em;
+  position:static;
+  margin-right: 1em;
+}
+
+#select footer span{
+  font-weight: bold;
+  font-size: 1.15em;
+}
+
+#select footer #batata_selecionada{
+  font-weight: normal;
+  font-size: .8em;
+  display: block;
+}
+
+#select footer, #select header{
+  width: 100%;
+  height: 15%;
+  background-color: #616161;
 }
