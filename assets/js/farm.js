@@ -1,5 +1,5 @@
 // Esse codigo depende do template.js
-const Img_batata_folder = "img/";
+const Img_batata_folder = "assets/img/";
 const Terra = "";
 const InfoBatatas = {
   "simples": {
@@ -34,6 +34,13 @@ function msToTime(duration) {
   return hours + ":" + minutes + ":" + seconds;
 }
 
+const TEMP = new Template();
+TEMP.setFolder("/assets/templates")
+.addTemplate({
+  info_batata: "info_batata.html",
+  terra: "terra.html"
+});
+
 let farm, user, tempo;
 
 class Batata{
@@ -59,8 +66,6 @@ class Farm{
     this.ySize;
 
     this.farmEl = document.querySelector("#farm");
-    this.terra_template = new Template("#terra_template");
-
     tempo.add(this.updateTime.bind(this));
   }
   updateDOM(){
@@ -91,7 +96,7 @@ class Farm{
     for(let i=0;i<x;i++){
       this.grids[i] = [];
       for(let j=0;j<y;j++){
-        let el = this.terra_template.render({x:i,y:j});
+        let el = TEMP.render("terra",{x:i,y:j});
 
         el.addEventListener('click',this.clickEvent.bind(this));
         this.grids[i][j] = el;
@@ -246,8 +251,6 @@ class User{
     this.armazenamento = 0;
     this.armazenamentoMax = 1000;
     this.selected = "none";
-
-    this.info_batata_template = new Template("#info_batata_template");
     this.info_holder = document.querySelector("#batatas");
     this.selectedSpanEl = document.querySelector("#batata_selecionada");
     this.selectedImgEl = document.querySelector("#img_selecionada");
@@ -267,7 +270,7 @@ class User{
       this.selectedImgEl.src = Img_batata_folder+'/'+InfoBatatas[tipo].img;
     }
     else{
-      this.selectedSpanEl.innerHTML = "(nada)";  
+      this.selectedSpanEl.innerHTML = "(nada)";
       this.selectedImgEl.src = "";
       this.selectedImgEl.style.display = "none";
     }
@@ -289,7 +292,7 @@ class User{
   generateInfo(){
     let el;
     for (let batata in InfoBatatas){
-      el  = this.info_batata_template.render(InfoBatatas[batata],{nome: batata});
+      el  = TEMP.render("info_batata",InfoBatatas[batata],{nome: batata});
       el.addEventListener("click",function(){
         this.select(batata);
       }.bind(this));
@@ -303,14 +306,15 @@ class User{
   }
 }
 
-tempo = new Tempo(10);
-user = new User();
-farm = new Farm();
+TEMP.loadTemplates(()=>{
+  tempo = new Tempo(10);
+  user = new User();
+  farm = new Farm();
 
-
-farm.fill(3,3);
-farm.fill(5,5);
-farm.resetDOM();
-user.select("simples");
-user.money=99999;
-tempo.start();
+  farm.fill(3,3);
+  farm.fill(5,5);
+  farm.resetDOM();
+  user.select("simples");
+  user.money=99999;
+  tempo.start();
+});

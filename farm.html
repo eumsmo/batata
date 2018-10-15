@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/clicker.css">
+    <link rel="stylesheet" href="assets/css/clicker.css">
   </head>
   <body>
     <main>
@@ -18,9 +18,12 @@
           <section id="batatas">
 
           </section>
+          <section id="jogador">
+
+          </section>
         </main>
         <footer>
-          <img src="img/potatoes.png" id="img_selecionada">
+          <img src="assets/img/potatoes.png" id="img_selecionada">
           <div class="">
             <span>Selecionado</span>
             <span id="batata_selecionada">(simples)</span>
@@ -28,28 +31,7 @@
         </footer>
       </div>
     </main>
-
-    <template id="terra_template">
-      <span class="terra" data-x="${x}" data-y="${y}">
-        <img class="batata">
-        <span class="barra">
-          <span class="progresso"></span>
-          <span class="indicador"></span>
-        </span>
-      </span>
-    </template>
-
-    <template id="info_batata_template">
-      <div class="info_batata">
-        <img src="img/${img}" alt="Batatas comuns">
-        <div class="informacao">
-          <h2>${nome}</h2>
-          <p>Preço: ${preco} real(s)</p>
-          <p>Armazenamento: ${armazenamento} batata(s)</p>
-        </div>
-      </div>
-    </template>
-    <script src="js/template.js" charset="utf-8"></script>
-    <script src="js/farm.js" charset="utf-8"></script>
+    <script src="assets/js/template.js" charset="utf-8"></script>
+    <script src="assets/js/farm.js" charset="utf-8"></script>
   </body>
 </html>

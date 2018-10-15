@@ -1,0 +1,61 @@
+<style media="screen">
+  .info_batata img{
+    width: 3em;
+    border: 5px solid grey;
+    position: absolute;
+    left: 10px;
+    margin-left: 0;
+    box-sizing: border-box;
+
+    background-image: url(../img/dirt.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    box-sizing: content-box;
+    background-color: #793910;
+  }
+
+  .info_batata .informacao h2{
+    display: inline;
+    margin-top: 0;
+    margin-left: 0;
+  }
+
+  .info_batata{
+    position: relative;
+    width: 100%;
+    height: 100px;
+    background-color: #939393;
+
+    padding: 10px;
+    box-sizing: border-box;
+    border-bottom: 2.5px inset #646464;
+  }
+
+
+
+  .info_batata:hover{
+    filter: brightness(0.9);
+  }
+
+  .info_batata .informacao{
+    display: block;
+    margin-left: 4.5em;
+  }
+
+  .info_batata .informacao p{
+    margin: 0;
+  }
+
+  .info_batata.selecionado img{
+    border-color: #4d7f4e;
+  }
+</style>
+
+<div class="info_batata">
+  <img src="/assets/img/${img}" alt="Batatas comuns">
+  <div class="informacao">
+    <h2>${nome}</h2>
+    <p>Preço: ${preco} real(s)</p>
+    <p>Retorno: ${armazenamento} real(s)</p>
+  </div>
+</div>
