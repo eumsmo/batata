@@ -2,22 +2,25 @@
 const Img_batata_folder = "assets/img/";
 const Terra = "";
 const InfoBatatas = {
-  "simples": {
+  "Batata Comum": {
+    "descricao": "É a sua primeira batata!",
     "img": "potatoes.png",
     "preco": 1,
-    "armazenamento": 1,
+    "retorno": 2,
     "tempo": 10
   },
-  "test": {
+  "Batata Test": {
+    "descricao": "Tudo é apenas uma simulação",
     "img": "potato.png",
     "preco": 15,
-    "armazenamento": 3,
+    "retorno": 35,
     "tempo": 30
   },
-  "testa": {
+  "Batata Testa": {
+    "descricao": "Não é uma testa de verdade",
     "img": "potato.png",
     "preco": 30,
-    "armazenamento": 10,
+    "retorno": 75,
     "tempo": 60
   }
 };
@@ -248,12 +251,10 @@ class Tempo {
 class User{
   constructor(){
     this.money = 0;
-    this.armazenamento = 0;
-    this.armazenamentoMax = 1000;
     this.selected = "none";
     this.info_holder = document.querySelector("#batatas");
-    this.selectedSpanEl = document.querySelector("#batata_selecionada");
-    this.selectedImgEl = document.querySelector("#img_selecionada");
+    //this.selectedSpanEl = document.querySelector("#batata_selecionada");
+    //this.selectedImgEl = document.querySelector("#img_selecionada");
 
     this.generateInfo();
   }
@@ -264,7 +265,7 @@ class User{
 
   select(tipo){
     this.selected = tipo;
-    if(tipo!='none'){
+    /*if(tipo!='none'){
       this.selectedSpanEl.innerHTML = `(${tipo})`;
       this.selectedImgEl.style.display = "block";
       this.selectedImgEl.src = Img_batata_folder+'/'+InfoBatatas[tipo].img;
@@ -273,7 +274,7 @@ class User{
       this.selectedSpanEl.innerHTML = "(nada)";
       this.selectedImgEl.src = "";
       this.selectedImgEl.style.display = "none";
-    }
+    }*/
   }
 
   buy(){
@@ -284,8 +285,8 @@ class User{
     } else return false;
   }
   collect(batata){
-    let quant = InfoBatatas[batata.tipo].armazenamento;
-    this.armazenamento+=quant;
+    let quant = InfoBatatas[batata.tipo].retorno;
+    this.retorno+=quant;
     batata.tipo = "none";
   }
 
@@ -298,11 +299,6 @@ class User{
       }.bind(this));
       this.info_holder.appendChild(el);
     }
-
-    el = document.querySelector("#select footer img");
-    el.addEventListener("click",function(){
-      this.select("none");
-    }.bind(this));
   }
 }
 
@@ -314,7 +310,7 @@ TEMP.loadTemplates(()=>{
   farm.fill(3,3);
   farm.fill(5,5);
   farm.resetDOM();
-  user.select("simples");
+  user.select("Batata Comum");
   user.money=99999;
   tempo.start();
 });
