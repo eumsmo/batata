@@ -1,0 +1,137 @@
+body{
+    margin: 0;
+}
+
+html, body{
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+body > main{
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  position: relative;
+  /*
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  */
+}
+
+#farm{
+  display: grid;
+/*  grid-template-columns: 20% 20% 20% 20% 20%;
+  grid-template-rows: 20% 20% 20% 20% 20%;*/
+  background-color: #793910;
+  box-sizing: border-box;
+}
+
+
+/*
+@media (orientation: portrait){
+  #farm{
+    width: 100vw;
+    height: 100vw;
+  }
+}
+
+@media (orientation: landscape){
+  #farm{
+    width: 100vh;
+    height: 100vh;
+  }
+}
+*/
+
+#farm{
+  width: 300px/*100vh*/;
+  height: 300px/*100vh*/;
+}
+
+.terra{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-image: url(../img/dirt.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  box-sizing: content-box;
+  background-color: #793910;
+}
+
+
+.terra .batata{
+  opacity: 0;
+}
+
+.plantado .batata{
+  opacity: 1;
+}
+
+.batata{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.terra:hover::after{
+  content: '';
+  position: absolute;;
+  width: 100%;
+  height: 100%;
+  border: 1px dashed #03a9f44f;
+  z-index: 2;
+  box-sizing: border-box;
+}
+/*:not(.plantado)*/
+.terra:hover{
+  transform: scale(1.1);
+  z-index: 1;
+  filter: brightness(1.02);
+}
+
+.terra.plantado:hover{
+  filter: grayscale(1);
+}
+
+.plantado .barra{
+  width: 80%;
+  margin-left: 10%;
+  height: 10%;
+  background-color: #505050;
+  border: 1px solid #484848;
+  box-sizing: border-box;
+  z-index: 9;
+  content: '';
+  position: absolute;
+  bottom: 15%;
+}
+
+.plantado .progresso{
+  position: absolute;
+  width: 0%;
+  height: 100%;
+  content: '';
+  background-color: blue;
+}
+
+.indicador{
+  display: none;
+}
+
+.plantado .indicador{
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  top: -50%;
+  font-size: 75%;
+  font-weight: bold;
+  font-family: monospace;
+  color: white;
+}

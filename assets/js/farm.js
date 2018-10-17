@@ -38,7 +38,7 @@ function msToTime(duration) {
 }
 
 const TEMP = new Template();
-TEMP.setFolder("/assets/templates")
+TEMP.setFolder("assets/templates")
 .addTemplate({
   info_batata: "info_batata.html",
   terra: "terra.html"
@@ -252,11 +252,17 @@ class User{
   constructor(){
     this.money = 0;
     this.selected = "none";
-    this.info_holder = document.querySelector("#batatas");
-    //this.selectedSpanEl = document.querySelector("#batata_selecionada");
-    //this.selectedImgEl = document.querySelector("#img_selecionada");
+    this.buyBatataHolder = document.querySelector("section.selectBatata");
+    this.buyUpgradeHolder = document.querySelector("section.selectUpgrade");
 
-    this.generateInfo();
+    this.buyMenu = document.querySelector("#select");
+    this.buyMenuAbrir = document.querySelector("#abrirComprarBtn");
+    this.buyMenuClose = document.querySelector("#select .close");
+    this.tabBtBatata = document.querySelector("span.selectBatata");
+    this.tabBtUpgrade = document.querySelector("span.selectUpgrade");
+
+    this.generateDOM();
+    this.manageDOM();
   }
 
   hasSelected(){
@@ -290,15 +296,39 @@ class User{
     batata.tipo = "none";
   }
 
-  generateInfo(){
+  generateDOM(){
     let el;
     for (let batata in InfoBatatas){
-      el  = TEMP.render("info_batata",InfoBatatas[batata],{nome: batata});
+      el  = TEMP.render("info_batata",InfoBatatas[batata],{nome: batata}); //Gera um item de batata para comprar
       el.addEventListener("click",function(){
         this.select(batata);
       }.bind(this));
-      this.info_holder.appendChild(el);
+      this.buyBatataHolder.appendChild(el);
     }
+  }
+
+  menuTabEvt(str){
+    console.log(str);
+    if(str==="batata"){
+      this.buyMenu.classList.add("selectBatata");
+      this.buyMenu.classList.remove("selectUpgrade");
+    } else if (str==="upgrade") {
+      this.buyMenu.classList.remove("selectBatata");
+      this.buyMenu.classList.add("selectUpgrade");
+    } else if(str==="open"){
+      this.buyMenu.classList.remove("hide");
+      this.buyMenu.classList.add("selectBatata");
+      this.buyMenu.classList.remove("selectUpgrade");
+    } else if(str==="close") {
+      this.buyMenu.classList.add("hide");
+    }
+  }
+
+  manageDOM(){
+    this.tabBtBatata.addEventListener("click",function(){this.menuTabEvt("batata")}.bind(this));
+    this.tabBtUpgrade.addEventListener("click",function(){this.menuTabEvt("upgrade")}.bind(this));
+    this.buyMenuClose.addEventListener("click",function(){this.menuTabEvt("close")}.bind(this));
+    this.buyMenuAbrir.addEventListener("click",function(){this.menuTabEvt("open")}.bind(this));
   }
 }
 

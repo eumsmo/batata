@@ -34,7 +34,10 @@ class ReadTemplates{
     for(let templateName in this.templates) {
       promises[templateName] = fetch(this.templates[templateName])
         .then(res=>res.text())
-        .then(txt=>[templateName,txt])
+        .then(txt=>{
+          delete that.templates[templateName];
+          return [templateName,txt];
+        })
         .catch(console.error);
     }
 
