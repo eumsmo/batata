@@ -110,8 +110,16 @@ section.selectUpgrade{
   margin-top: .75em;
 }
 
-.item_comprar:hover{
+.item_comprar:not(.compravel){
+  filter: grayscale(1);
+}
+
+.compravel.item_comprar:hover{
   filter: brightness(0.9);
+}
+
+.item_comprar:hover{
+  filter: brightness(0.9) grayscale(1);
 }
 
 .item_comprar .informacao{
@@ -160,12 +168,12 @@ section.selectUpgrade{
   border-radius: 2.5px;
 }
 
-.comprarBt:hover{
+.compravel .comprarBt:hover{
   transform: translateY(-50%) scale(1.1);
   cursor: pointer;
 }
 
-.comprarBt:active{
+.compravel .comprarBt:active{
   transform: translateY(-50%);
 }
 

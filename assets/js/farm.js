@@ -24,6 +24,11 @@ const InfoBatatas = {
     "tempo": 60
   }
 };
+
+const InfoUpgrades = {
+  "": ""
+};
+
 function msToTime(duration) {
   var milliseconds = parseInt((duration % 1000) / 100),
     seconds = parseInt((duration / 1000) % 60),
@@ -44,7 +49,7 @@ TEMP.setFolder("assets/templates")
   terra: "terra.html"
 });
 
-let farm, user, tempo;
+let farm, user, tempo, loja;
 
 class Batata{
   constructor(tipo){
@@ -152,12 +157,12 @@ class Farm{
 
   addBatata(i,j){
     if(i<this.xSize && j<this.ySize && this.arr[i][j]===false){
-      if(user.hasSelected() && user.buy()){
+      if(user.hasSelected() && user.plant()){
         this.arr[i][j] = new Batata(user.selected);
         this.updateDOM();
         return true;
       } else if(user.hasSelected())
-        console.error("Usuario não tem dinheiro suficiente!");
+        console.error("Usuario não tem nenhuma batata do tipo!");
       else
         console.warn("Usuario não selecionou nenhuma batata!");
       return false;
@@ -168,7 +173,7 @@ class Farm{
       this.arr[i][j]=false;
       this.updateDOM();
       return true;
-    }
+    } else return false;
   }
   collectBatata(i,j){
     let batata = this.arr[i][j];
@@ -248,10 +253,11 @@ class Tempo {
     this.loop();
   }
 }
-class User{
+
+class Loja{
   constructor(){
-    this.money = 0;
-    this.selected = "none";
+    this.batatasEl = {};
+
     this.buyBatataHolder = document.querySelector("section.selectBatata");
     this.buyUpgradeHolder = document.querySelector("section.selectUpgrade");
 
@@ -263,48 +269,46 @@ class User{
 
     this.generateDOM();
     this.manageDOM();
+
   }
 
-  hasSelected(){
-    return this.selected!="none";
-  }
-
-  select(tipo){
-    this.selected = tipo;
-    /*if(tipo!='none'){
-      this.selectedSpanEl.innerHTML = `(${tipo})`;
-      this.selectedImgEl.style.display = "block";
-      this.selectedImgEl.src = Img_batata_folder+'/'+InfoBatatas[tipo].img;
-    }
-    else{
-      this.selectedSpanEl.innerHTML = "(nada)";
-      this.selectedImgEl.src = "";
-      this.selectedImgEl.style.display = "none";
-    }*/
-  }
-
-  buy(){
-    let tipo = InfoBatatas[this.selected];
-    if(this.money >= tipo.preco){
-      this.money-=tipo.preco;
-      return true;
-    } else return false;
-  }
-  collect(batata){
-    let quant = InfoBatatas[batata.tipo].retorno;
-    this.retorno+=quant;
-    batata.tipo = "none";
+  isOpen(){
+    return !this.buyMenu.classList.contains("hide");
   }
 
   generateDOM(){
-    let el;
+    let el, that = this;
     for (let batata in InfoBatatas){
       el  = TEMP.render("info_batata",InfoBatatas[batata],{nome: batata}); //Gera um item de batata para comprar
-      el.addEventListener("click",function(){
-        this.select(batata);
+      el.querySelector(".comprarBt").addEventListener("click",function(){
+        if(user.buy(batata)){
+          that.updateCounter(batata);
+        }
+
       }.bind(this));
       this.buyBatataHolder.appendChild(el);
+      this.batatasEl[batata] = el;
     }
+  }
+
+  updateAll(what){
+    let str = what;
+    str = str.charAt(0).toUpperCase() + str.slice(1);
+    for (let batata in this.batatasEl) {
+      this["update"+str](batata);
+    }
+  }
+
+  updateCounter(batata){
+    let el = this.batatasEl[batata];
+    el.querySelector(".quant").innerHTML = `x ${user.armazem[batata]}`;
+  }
+  updateBuyable(batata){
+    let current = this.batatasEl[batata];
+    if(user.money >= InfoBatatas[batata].preco)
+      current.classList.add("compravel");
+    else
+      current.classList.remove("compravel");
   }
 
   menuTabEvt(str){
@@ -316,6 +320,8 @@ class User{
       this.buyMenu.classList.remove("selectBatata");
       this.buyMenu.classList.add("selectUpgrade");
     } else if(str==="open"){
+      this.updateAll("buyable");
+      this.updateAll("counter");
       this.buyMenu.classList.remove("hide");
       this.buyMenu.classList.add("selectBatata");
       this.buyMenu.classList.remove("selectUpgrade");
@@ -332,15 +338,70 @@ class User{
   }
 }
 
+class User{
+  constructor({money,armazem}={}){
+    this._money = money||0;
+    //O proximo pedacinho de código apenas define que qualquer alteração na propriedade money, quando o usuario estiver na loja, irá atualizar os elementos da mesma
+    Object.defineProperty(this,"money",{
+      get(){return this._money;},
+      set(val){
+        this._money = val;
+        if(loja.isOpen()) loja.updateAll("buyable");
+      }
+    });
+
+    this.selected = "none";
+    this.armazem = User.newArmazem(armazem);
+  }
+
+  static newArmazem(obj){
+    let armazem = obj||{};
+    for(let batata in InfoBatatas)
+      armazem[batata] = armazem[batata]||0;
+    return armazem;
+  }
+
+  hasSelected(){
+    return this.selected!="none";
+  }
+
+  select(tipo){
+    this.selected = tipo;
+  }
+
+  buy(tipo){
+    let batata = InfoBatatas[tipo];
+    if(this.money >= batata.preco){
+      this.money-=batata.preco;
+      this.armazem[tipo]++;
+      return true;
+    } else return false;
+  }
+
+  plant(){
+    if(this.armazem[this.selected]>0){
+      this.armazem[this.selected]--;
+      return true;
+    } else return false;
+  }
+
+  collect(batata){
+    let quant = InfoBatatas[batata.tipo].retorno;
+    this.money+=quant;
+    batata.tipo = "none";
+  }
+}
+
 TEMP.loadTemplates(()=>{
   tempo = new Tempo(10);
-  user = new User();
+  loja = new Loja();
+  user = new User({armazem:{"Batata Comum": 10}});
   farm = new Farm();
+  loja.updateAll("buyable");
 
   farm.fill(3,3);
   farm.fill(5,5);
   farm.resetDOM();
   user.select("Batata Comum");
-  user.money=99999;
   tempo.start();
 });
