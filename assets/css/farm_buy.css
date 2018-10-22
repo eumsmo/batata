@@ -1,13 +1,8 @@
 #select{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  z-index: 9;
-
+  position: relative;
   width: 90%;
   max-width: 400px;
-  height: 90%;
+  height: calc(90% - 50px);
   display: block;
 
   font-family: 'Roboto Mono', monospace;
@@ -15,10 +10,10 @@
 
   transition: left ease .5s;
 }
-
+/*
 #select.hide{
   left: 150%;
-}
+}*/
 
 #select .close{
   position: absolute;
