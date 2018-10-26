@@ -3,8 +3,7 @@ html,body{
 }
 
 body{
-
-  display: flex;
+ display: flex;
 }
 
 main{
@@ -31,6 +30,7 @@ p{
 }
 .img_esq{
   display: inline;
+  width: 10%;
 }
 .list{
   margin-left: 50px;
@@ -38,11 +38,12 @@ p{
 
 .receita{
   float: right;
-
+  margin-bottom: 5em;
 }
 .receita_e{
   float: left;
   clear: both;
+  margin-bottom: 5em;
 }
 /*----------*/
 .sidebar{
