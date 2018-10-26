@@ -49,7 +49,7 @@ TEMP.setFolder("assets/templates")
   terra: "terra.html"
 });
 
-let farm, user, tempo, loja;
+let farm, user, tempo, loja, display;
 
 class Batata{
   constructor(tipo){
@@ -346,10 +346,11 @@ class User{
       get(){return this._money;},
       set(val){
         this._money = val;
-        if(loja.isOpen()) loja.updateAll("buyable");
+        this.moneyUpdate(val);
       }
     });
 
+    this.displayMoney = document.querySelector("#display_money");
     this.selected = "none";
     this.armazem = User.newArmazem(armazem);
   }
@@ -359,6 +360,15 @@ class User{
     for(let batata in InfoBatatas)
       armazem[batata] = armazem[batata]||0;
     return armazem;
+  }
+
+  moneyFormat(){
+    return this.money.toFixed(2);
+  }
+
+  moneyUpdate(){
+    this.displayMoney.innerHTML = this.moneyFormat();
+    if(loja.isOpen()) loja.updateAll("buyable");
   }
 
   hasSelected(){
@@ -398,6 +408,7 @@ TEMP.loadTemplates(()=>{
   user = new User({armazem:{"Batata Comum": 10}});
   farm = new Farm();
   loja.updateAll("buyable");
+  user.moneyUpdate();
 
   farm.fill(3,3);
   farm.fill(5,5);
