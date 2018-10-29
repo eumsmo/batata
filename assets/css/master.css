@@ -4,6 +4,7 @@ html,body{
 
 body{
  display: flex;
+ margin: 0;
 }
 
 main{
@@ -13,7 +14,7 @@ main{
   box-sizing: content-box;
   overflow-x: auto;
   font-family: 'Mali', cursive;
-  margin: 15px;
+  margin: 0;
 
   transition: .5s;
   z-index: 1;
@@ -30,11 +31,11 @@ p{
 }
 .img_esq{
   display: inline;
-  width: 10%;
-}
+  width: 100%;
+}/*
 .list{
   margin-left: 50px;
-}
+}*/
 
 .receita{
   float: right;
@@ -82,6 +83,7 @@ p{
   justify-content: center;
   font-family: 'Roboto', sans-serif;
   color: white;
+  text-decoration: none;
 }
 
 .sidebar .list img{

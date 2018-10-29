@@ -30,6 +30,18 @@ body > main{
   box-sizing: border-box;
 }
 
+#conteudo{
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.icone{
+  background-color: white;
+
+}
+
+.icone img{height: 2em}
 
 /*
 @media (orientation: portrait){

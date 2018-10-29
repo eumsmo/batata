@@ -15,6 +15,20 @@
   transition: left ease .5s;
 }
 
+@media (orientation: landscape){
+  #select{
+    top: 0; right: 0; left: unset;
+    transform: unset;
+    height: 100%;
+  }
+
+  #select .close{display: none}
+
+  #conteudo{
+    width: calc(100% - 400px);
+  }
+}
+
 #select.hide{
   left: -100%;
 }
