@@ -122,10 +122,18 @@ class Farm{
         j = el.dataset.y,
         grid = this.arr[i][j];
 
-    if(!grid)
-      this.addBatata(i,j);
-    else if(grid.pronta)
-      this.collectBatata(i,j);
+    if(grid && grid.pronta) return this.collectBatata(i,j);
+
+    switch (user.mode){
+      case "plant":
+        if(!grid) this.addBatata(i,j);
+        break;
+      case "remove":
+        break;
+      case "item":
+        break;
+    }
+
   }
   fill(x,y){
     this.xSize = x;
@@ -253,7 +261,6 @@ class Tempo {
     this.loop();
   }
 }
-
 class Loja{
   constructor(){
     this.batatasEl = {};
@@ -291,7 +298,7 @@ class Loja{
     }
   }
 
-  updateAll(what){
+  updateAll(what){ //what = "counter", "buyable"
     let str = what;
     str = str.charAt(0).toUpperCase() + str.slice(1);
     for (let batata in this.batatasEl) {
@@ -349,11 +356,10 @@ class Display{
   }
 
 }
-
 class User{
   constructor({money,armazem}={}){
-    this._money = money||0;
     //O proximo pedacinho de código apenas define que qualquer alteração na propriedade money, quando o usuario estiver na loja, irá atualizar os elementos da mesma
+    this._money = money||0;
     Object.defineProperty(this,"money",{
       get(){return this._money;},
       set(val){
@@ -362,27 +368,22 @@ class User{
       }
     });
 
-
+    this.mode = "plant"; // "none", "plant", "remove", "item"
     this.selected = "none";
-    this.armazem = User.newArmazem(armazem);
-  }
+    this.armazem = armazem||{};
 
-  static newArmazem(obj){
-    let armazem = obj||{};
     for(let batata in InfoBatatas)
-      armazem[batata] = armazem[batata]||0;
-    return armazem;
+      this.armazem[batata] = this.armazem[batata]||0;
   }
 
   moneyUpdate(){
     display.updateMoney();
-    if(loja.isOpen()) loja.updateAll("buyable");
+    /*if(loja.isOpen())*/ loja.updateAll("buyable");
   }
 
   hasSelected(){
     return this.selected!="none";
   }
-
   select(tipo){
     this.selected = tipo;
   }
@@ -395,18 +396,21 @@ class User{
       return true;
     } else return false;
   }
-
   plant(){
     if(this.armazem[this.selected]>0){
       this.armazem[this.selected]--;
+      loja.updateAll("counter");
       return true;
     } else return false;
   }
-
   collect(batata){
     let quant = InfoBatatas[batata.tipo].retorno;
     this.money+=quant;
     batata.tipo = "none";
+  }
+
+  changeMode(modo){
+    this.mode = modo;
   }
 }
 
