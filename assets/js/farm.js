@@ -337,6 +337,18 @@ class Loja{
     this.buyMenuAbrir.addEventListener("click",function(){this.menuTabEvt("open")}.bind(this));
   }
 }
+class Display{
+  constructor(){
+    this.displayMoney = document.querySelector("#display_money");
+  }
+
+  moneyFormat(val){return val.toFixed(2)}
+
+  updateMoney(){
+    this.displayMoney.innerHTML = this.moneyFormat(user.money);
+  }
+
+}
 
 class User{
   constructor({money,armazem}={}){
@@ -350,7 +362,7 @@ class User{
       }
     });
 
-    this.displayMoney = document.querySelector("#display_money");
+
     this.selected = "none";
     this.armazem = User.newArmazem(armazem);
   }
@@ -362,12 +374,8 @@ class User{
     return armazem;
   }
 
-  moneyFormat(){
-    return this.money.toFixed(2);
-  }
-
   moneyUpdate(){
-    this.displayMoney.innerHTML = this.moneyFormat();
+    display.updateMoney();
     if(loja.isOpen()) loja.updateAll("buyable");
   }
 
@@ -405,6 +413,7 @@ class User{
 TEMP.loadTemplates(()=>{
   tempo = new Tempo(10);
   loja = new Loja();
+  display = new Display();
   user = new User({armazem:{"Batata Comum": 10}});
   farm = new Farm();
   loja.updateAll("buyable");

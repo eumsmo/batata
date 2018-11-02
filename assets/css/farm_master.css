@@ -34,14 +34,36 @@ body > main{
   height: 100%;
   width: 100%;
   position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#opcoes{
+  position: absolute;
+  bottom: 0; right: 0;
+  /*width: 100%;*/
+  padding: .5em;
+  box-sizing: border-box;
 }
 
 .icone{
+  display: inline-block;
   background-color: white;
+  height: 3em;
+
+  padding: .5em;
+
+  border-radius: 50%;
+  box-sizing: border-box;
 
 }
 
-.icone img{height: 2em}
+.icone img{
+  display: inline-block;
+  height: 100%;
+}
 
 /*
 @media (orientation: portrait){

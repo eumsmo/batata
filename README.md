@@ -15,7 +15,6 @@ Conteúdo do site:
 
 Jogo de plantação:
  - Loja de upgrades
- - Display de informações (dinheiro, batatas compradas, etc)
  - Mais opções para a plantação
  - Manter dados através de localStorage
  - Acrescentar tipos de batatas e suas respectivas imagens
@@ -24,5 +23,4 @@ Jogo de plantação:
  Site no geral:
 
  - Mais elementos para o site
- - Back-end
- - Talvez ReactJS ou AngularJS
+ - Adicionar Back-end
