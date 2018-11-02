@@ -20,6 +20,11 @@ body > main{
   justify-content: center;
   align-items: center;
   */
+
+  /* Usuario não selecionar textos */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Chrome and Opera */
 }
 
 #farm{
@@ -46,6 +51,7 @@ body > main{
   /*width: 100%;*/
   padding: .5em;
   box-sizing: border-box;
+  z-index: 8;
 }
 
 .icone{
@@ -112,7 +118,7 @@ body > main{
   height: 100%;
   z-index: 1;
 }
-
+/*
 .terra:hover::after{
   content: '';
   position: absolute;;
@@ -121,16 +127,17 @@ body > main{
   border: 1px dashed #03a9f44f;
   z-index: 2;
   box-sizing: border-box;
-}
+}*/
 /*:not(.plantado)*/
-.terra:hover{
+.terra:active{
   transform: scale(1.1);
   z-index: 1;
   filter: brightness(1.02);
 }
 
-.terra.plantado:hover{
-  filter: grayscale(1);
+.terra.plantado:active{
+  filter: unset;
+  transform: unset;
 }
 
 .plantado .barra{
@@ -140,7 +147,7 @@ body > main{
   background-color: #505050;
   border: 1px solid #484848;
   box-sizing: border-box;
-  z-index: 9;
+  z-index: 8;
   content: '';
   position: absolute;
   bottom: 15%;

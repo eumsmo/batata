@@ -1,0 +1,11 @@
+.modal{
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  z-index: 9;
+  transition: left ease .5s;
+}
+
+.modal.hide{
+  left: -100%;
+}

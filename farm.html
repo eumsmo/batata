@@ -4,10 +4,12 @@
     <meta charset="utf-8">
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet"> -->
+    <link rel="stylesheet" href="assets/css/modal.css">
     <link rel="stylesheet" href="assets/css/farm_master.css">
     <link rel="stylesheet" href="assets/css/farm_buy.css">
     <link rel="stylesheet" href="assets/css/farm_information.css">
+    <link rel="stylesheet" href="assets/css/farm_items.css">
   </head>
   <body>
     <main>
@@ -16,18 +18,28 @@
           R$ <span id="display_money">0.00</span>
         </header>
 
+        <div id="caixa" class="modal">
+          <header>
+            <span class="close">X</span>
+          </header>
+          <main>
+
+          </main>
+        </div>
+
         <div id="farm">
 
         </div>
 
         <footer id="opcoes">
+          <span class="icone"><img src="assets/img/farmer.png" alt=""></span>
           <span class="icone"><img src="assets/img/trash.png" alt=""></span>
-          <span class="icone"><img src="assets/img/open-box.png" alt=""></span>
+          <span class="icone" id="abrirCaixaBtn"><img src="assets/img/open-box.png" alt=""></span>
           <span class="icone" id="abrirComprarBtn"><img src="assets/img/shop.png" alt=""></span>
         </footer>
       </section>
 
-      <div id="select" class="selectBatata hide">
+      <div id="select" class="modal selectBatata hide">
         <span class="close">X</span>
         <header>
           <span class="selectBatata">Batatas</span>
@@ -42,6 +54,7 @@
         </section>
       </div>
     </main>
+    <script src="assets/js/modal.js" charset="utf-8"></script>
     <script src="assets/js/template.js" charset="utf-8"></script>
     <script src="assets/js/farm.js" charset="utf-8"></script>
   </body>

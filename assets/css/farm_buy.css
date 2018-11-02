@@ -1,18 +1,11 @@
 #select{
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  z-index: 9;
-
   width: 90%;
   max-width: 400px;
-  height: 90%;
+  height: 80%;
   display: block;
 
   font-family: 'Roboto Mono', monospace;
   font-size: large;
-
-  transition: left ease .5s;
 }
 
 @media (orientation: landscape){
@@ -22,6 +15,10 @@
     height: 100%;
   }
 
+  #select.hide{
+    left: unset;
+  }
+
   #select .close{display: none}
 
   #conteudo{
@@ -29,11 +26,7 @@
   }
 }
 
-#select.hide{
-  left: -100%;
-}
-
-#select .close{
+.close{
   position: absolute;
   right: -.75em; top: -.5em;
   width: 2em;
@@ -48,8 +41,12 @@
   line-height: 2em;
   color: white;
 
-  transition: ease 1s;
+  transition: ease 1s, filter ease .1s;
   opacity: 1;
+}
+
+.close:active{
+  filter: brightness(1.1);
 }
 
 #select section{
@@ -126,14 +123,14 @@ section.selectUpgrade{
 .item_comprar:not(.compravel){
   filter: grayscale(1);
 }
-
-.compravel.item_comprar:hover{
+/*
+.compravel.item_comprar:active{
   filter: brightness(0.9);
 }
 
-.item_comprar:hover{
+.item_comprar:active{
   filter: brightness(0.9) grayscale(1);
-}
+}*/
 
 .item_comprar .informacao{
   width: 55%;
@@ -182,12 +179,13 @@ section.selectUpgrade{
 }
 
 .compravel .comprarBt:hover{
-  transform: translateY(-50%) scale(1.1);
   cursor: pointer;
+
 }
 
 .compravel .comprarBt:active{
-  transform: translateY(-50%);
+  transform: translateY(-50%) scale(1.05);
+  filter: brightness(1.1);
 }
 
 .comprarBt p{

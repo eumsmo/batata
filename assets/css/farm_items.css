@@ -1,0 +1,62 @@
+#caixa{
+  background-color: #976f34;
+  width: 90%;
+  max-width: 600px;
+  height: 70%;
+
+  z-index: 9;
+  font-family: 'Roboto Mono', monospace;
+}
+
+#caixa header{
+  height: 2em;
+  background-color: #825c25;
+}
+
+#caixa main{
+  height: calc(100% - 2em);
+  padding: 1em;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  align-content: flex-start;
+}
+
+.item{
+  position: relative;
+  display: inline-flex;
+  width: 5em;
+  height: 5em;
+  background-color: #e8e8e8;
+  box-sizing: border-box;
+  border-radius: 15%;
+
+  padding: .75em;
+  margin: .25em;
+}
+
+.item .quant{
+  position: absolute;
+  bottom: -.5em;
+  right: -.5em;
+
+  background-color: #03a9f4;
+  color: white;
+  color: white;
+  padding: 2.5px;
+  border-radius: 5px;
+}
+
+.item img{
+  margin: 0 auto;
+  display: block;
+  width: 100%;
+  border: 5px solid #783910;
+  border-radius: 2.5px;
+  box-sizing: border-box;
+  background-image: url(../img/dirt.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: #793910;
+}
