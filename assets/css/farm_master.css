@@ -33,6 +33,22 @@ body > main{
   grid-template-rows: 20% 20% 20% 20% 20%;*/
   background-color: #793910;
   box-sizing: border-box;
+  width: 300px/*100vh*/;
+  height: 300px/*100vh*/;
+}
+
+@media (orientation: landscape) {
+  #farm{
+    width: 70vh;
+    height: 70vh;
+  }
+}
+
+@media (orientation: portrait) {
+  #farm{
+    width: 70vw;
+    height: 70vw;
+  }
 }
 
 #conteudo{
@@ -86,12 +102,6 @@ body > main{
   }
 }
 */
-
-#farm{
-  width: 300px/*100vh*/;
-  height: 300px/*100vh*/;
-}
-
 .terra{
   position: relative;
   width: 100%;
