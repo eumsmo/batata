@@ -82,6 +82,8 @@ body > main{
 
 }
 
+.icone:hover{cursor: pointer;}
+
 .icone img{
   display: inline-block;
   height: 100%;
@@ -113,6 +115,19 @@ body > main{
   background-color: #793910;
 }
 
+.terra.plantado{
+  cursor: wait;
+  cursor: progress;
+}
+
+.terra.plantado.pronta{
+  cursor: move;
+  cursor: grab;
+}
+
+.terra.plantado.pronta:active{
+  cursor: grabbing;
+}
 
 .terra .batata{
   opacity: 0;

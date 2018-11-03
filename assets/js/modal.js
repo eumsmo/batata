@@ -4,7 +4,7 @@ class Modal {
     this.closeBt;
     this.openBt;
     this.status = "closed"; // "closed", "opened"
-
+    
     //this.closeEl(".close");
     this.closeCall = [];
     this.openCall = [];

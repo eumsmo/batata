@@ -50,7 +50,7 @@ TEMP.setFolder("assets/templates")
   item: "item.html"
 });
 
-let farm, user, tempo, loja, display, caixa;
+let farm, user, tempo, loja, display, caixa, save;
 
 class Batata{
   constructor(tipo){
@@ -67,15 +67,16 @@ class Batata{
   }
 }
 class Farm{
-  constructor(){
-    this.arr = [];
+  constructor({arr,size}={}){
+    this.arr = arr||[];
 
     this.grids = [];
-    this.xSize;
-    this.ySize;
+    this.xSize = size||5;
+    this.ySize = size||5;
 
     this.farmEl = document.querySelector("#farm");
     tempo.add(this.updateTime.bind(this));
+    this.fill(this.xSize,this.ySize);
   }
   updateDOM(){
     let x = this.arr.length,
@@ -179,6 +180,7 @@ class Farm{
   }
   removeBatata(i,j){
     if(i<this.xSize && j<this.ySize){
+      this.grids[i][j].classList.remove("pronta");
       this.arr[i][j]=false;
       this.updateDOM();
       return true;
@@ -209,6 +211,7 @@ class Farm{
     console.log("ready!");
     if(this.arr[i][j].pronta){
       indicadorEl.innerHTML = "Pronto!";
+      mainEl.classList.add("pronta");
     }
   }
 
@@ -229,6 +232,18 @@ class Farm{
     }.bind(this));
   }
 
+  importObj(obj){
+    this.arr = obj.arr||[];
+    this.xSize = obj.size||5;
+    this.ySize = obj.size||5;
+    this.fill(this.xSize,this.ySize);
+  }
+  exportObj(){
+    return {
+      arr: this.arr,
+      size: this.xSize
+    };
+  }
 }
 class Tempo {
   constructor(every){
@@ -293,7 +308,8 @@ class Loja{
 
   plantClickEvt(batata){
     if(user.hasBatata(batata)){
-
+      user.select(batata);
+      this.modal.close();
     }
   }
 
@@ -371,10 +387,9 @@ class Box{
 
     this.el = document.querySelector("#caixa");
     this.modal = new Modal(this.el);
-    this.modal.open();
     this.modal.closeEl("#caixa .close");
     this.modal.openEl("#abrirCaixaBtn");
-
+    this.modal.close();
     this.armazem = this.el.querySelector("main");
   }
 
@@ -383,13 +398,25 @@ class Box{
     return TEMP.render("item",item);
   }
 
+  clickEvt(batata){
+    if(user.hasBatata(batata)){
+      user.select(batata);
+      this.modal.close();
+    }
+  }
+
   generateDOM(){
     let quant;
     this.armazem.innerHTML ="";
     for (let batata in InfoBatatas) {
       this.items[batata] = this.generateItem(batata,quant);
+      this.items[batata].addEventListener("click",function(){
+        this.clickEvt(batata);
+      }.bind(this));
       this.armazem.appendChild(this.items[batata]);
     }
+
+    this.updateDOM();
   }
 
   updateEl(el,quant){
@@ -433,14 +460,12 @@ class User{
     display.updateMoney();
     /*if(loja.isOpen())*/ loja.updateAll("buyable");
   }
-
   hasSelected(){
     return this.selected!="none";
   }
   select(tipo){
     this.selected = tipo;
   }
-
   buy(tipo){
     let batata = InfoBatatas[tipo];
     if(this.money >= batata.preco){
@@ -471,9 +496,51 @@ class User{
     this.mode = modo;
     farm.farmEl.classList.value = (modo == "none")? "" : modo;
   }
+
+  importObj(obj){
+    this.money = obj.money;
+    this.armazem = obj.armazem;
+    caixa.updateDOM();
+  }
+  exportObj(){
+    return {
+      money: this.money,
+      armazem: this.armazem
+    }
+  }
+}
+class Save {
+  constructor() {
+
+  }
+
+  goTo(slot){
+    this.setData(this.getData(slot));
+  }
+
+  getData(slot){
+    let obj = localStorage.getItem("slot-"+slot);
+    if(obj) return JSON.parse(obj);
+  }
+
+  setData(obj){
+    farm.importObj(obj.farm);
+    user.importObj(obj.user);
+  }
+
+  saveData(slot){
+    let obj = {
+      user: user.exportObj(),
+      farm: farm.exportObj()
+    }
+
+    obj = JSON.stringify(obj);
+    localStorage.setItem('slot-'+slot,obj);
+  }
 }
 
 TEMP.loadTemplates(()=>{
+  save = new Save();
   tempo = new Tempo(10);
   loja = new Loja();
   caixa = new Box();
@@ -484,8 +551,6 @@ TEMP.loadTemplates(()=>{
   user.moneyUpdate();
   caixa.generateDOM();
 
-  farm.fill(3,3);
-  farm.fill(5,5);
   farm.resetDOM();
   user.select("Batata Comum");
   tempo.start();

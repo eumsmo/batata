@@ -1,0 +1,45 @@
+#user{
+  background-color: #2196f3;
+  width: 80%;
+  height: 90%;
+  padding: .5em;
+
+  z-index: 9;
+  font-family: 'Roboto Mono', monospace;
+  display: none;
+}
+
+.slot{
+  background-color: white;
+  height: 7em;
+  max-width: 300px;
+  font-size: .75em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .5em;
+}
+
+.slot figure{
+  float: left;
+  height: 70%;
+  display: inline-block;
+  margin: 0;
+  background-color: #e5ba2e;
+  border-radius: 50%;
+}
+.slot img{
+  height: 100%;
+  border-radius: 50%;
+}
+.slot main{
+  width: 70%;
+}
+
+.slot h2{
+  font-size: 1.25em;
+}
+
+.slot h2, .slot p{
+  margin: 0;
+}
