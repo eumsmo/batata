@@ -1,27 +1,50 @@
-#user{
-  background-color: #2196f3;
-  width: 80%;
-  height: 90%;
-  padding: .5em;
-
+#slots{
   z-index: 9;
   font-family: 'Roboto Mono', monospace;
-  display: none;
+  /*height: 23.5em;
+  */
+  height: 80%;
+  width: 90%;
+  max-width: calc(325px + 3em);
+  background-color: #8a8a8a;
 }
 
-.slot{
+#slots > main{
+  overflow-y: auto;
+  height: calc(100% - 3.5em);
+}
+
+#slots header{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #bcbcbc;
+  height: 2em;
+  font-size: 1.5em;
+}
+
+#slots h2{margin: 0}
+
+.slot section{
   background-color: white;
   height: 7em;
-  max-width: 300px;
-  font-size: .75em;
+  max-width: 325px;
+  font-size: .9em;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: .5em;
+  margin: .5em auto;
+  position: relative;
 }
+
+.slot.vazio .naoVazio{display: none}
+.slot.naoVazio .vazio{display: none}
 
 .slot figure{
   float: left;
+  position: relative;
   height: 70%;
   display: inline-block;
   margin: 0;
@@ -38,8 +61,67 @@
 
 .slot h2{
   font-size: 1.25em;
+  width: 100%;
 }
 
 .slot h2, .slot p{
   margin: 0;
 }
+
+.slot .icone{
+  height: 2em;
+  padding: .45em;
+  position: absolute;
+  bottom: -1em;
+}
+
+.slot .icone img{
+  border-radius: 0;
+}
+
+.icone.save{
+  background-color: #4caf50;
+  left: 0;
+}
+
+.icone.load{
+  background-color: #00bcd4;
+  right: 0;
+}
+
+.icone.delete{
+  background-color: #f44336;
+  right: -.4em;
+  bottom: -.4em;
+}
+
+.slot .vazio{
+  flex-wrap: wrap;
+  align-content: center;
+  text-align: center;
+  justify-content: center;
+}
+
+.slot .vazio span{
+  background-color: #00bcd4;
+  color: white;
+  padding: 5px;
+  border-radius: 2.5px;
+  font-size: 1.15em;
+  font-weight: bold;
+}
+
+.slot .vazio span:hover{
+  cursor: pointer;
+}
+
+.slot .vazio span:active{
+  filter: brightness(0.95);
+}
+
+#slots .slot .vazio h2{
+  font-size: 1.5em;
+  margin-bottom: .25em;
+}
+
+#abrirSaveBtn{display: none;}

@@ -16,9 +16,7 @@ Conteúdo do site:
 Jogo de plantação:
  - Loja de upgrades
  - Mais opções para a plantação
- - Manter dados através de localStorage
  - Acrescentar tipos de batatas e suas respectivas imagens
- - Estilização como um todo
 
  Site no geral:
 

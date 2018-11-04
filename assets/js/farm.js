@@ -41,13 +41,25 @@ function msToTime(duration) {
 
   return hours + ":" + minutes + ":" + seconds;
 }
+function formatDate(date){
+  let data = new Date(date),
+      dia = data.getDate();
+      mes = data.getMonth()+1;
+      ano = data.getFullYear();
+
+  dia = (dia<10)? "0"+dia:dia;
+  mes = (mes<10)? "0"+mes:mes;
+
+  return dia+'/'+mes+'/'+ano;
+}
 
 const TEMP = new Template();
 TEMP.setFolder("assets/templates")
 .addTemplate({
   info_batata: "info_batata.html",
   terra: "terra.html",
-  item: "item.html"
+  item: "item.html",
+  slot: "slot.html"
 });
 
 let farm, user, tempo, loja, display, caixa, save;
@@ -207,9 +219,12 @@ class Farm{
 
   setReady(i,j){
     let mainEl = this.grids[i][j],
+        progressEl = mainEl.querySelector(".progresso"),
         indicadorEl = mainEl.querySelector(".indicador");
+
     console.log("ready!");
     if(this.arr[i][j].pronta){
+      progressEl.style.width = "100%";
       indicadorEl.innerHTML = "Pronto!";
       mainEl.classList.add("pronta");
     }
@@ -237,6 +252,10 @@ class Farm{
     this.xSize = obj.size||5;
     this.ySize = obj.size||5;
     this.fill(this.xSize,this.ySize);
+    /* Update already ready */
+    this.forEach((el,i,j)=>{
+      if(el && el.pronta) this.setReady(i,j);
+    });
   }
   exportObj(){
     return {
@@ -437,9 +456,9 @@ class Box{
   }
 }
 class User{
-  constructor({money,armazem}={}){
+  constructor(){
     //O proximo pedacinho de código apenas define que qualquer alteração na propriedade money, quando o usuario estiver na loja, irá atualizar os elementos da mesma
-    this._money = money||0;
+    this._money = 1;
     Object.defineProperty(this,"money",{
       get(){return this._money;},
       set(val){
@@ -450,7 +469,9 @@ class User{
 
     this.mode = "plant"; // "none", "plant", "remove", "item"
     this.selected = "none";
-    this.armazem = armazem||{};
+    this.armazem = {};
+    this.dataInicio = Date.now();
+    this.nome = "teste";
 
     for(let batata in InfoBatatas)
       this.armazem[batata] = this.armazem[batata]||0;
@@ -500,42 +521,131 @@ class User{
   importObj(obj){
     this.money = obj.money;
     this.armazem = obj.armazem;
+    this.nome = obj.nome;
+    this.dataInicio = obj.inicio;
+
     caixa.updateDOM();
   }
   exportObj(){
     return {
       money: this.money,
-      armazem: this.armazem
+      armazem: this.armazem,
+      nome: this.nome,
+      inicio: this.dataInicio,
+      ultimo: Date.now()
     }
   }
 }
 class Save {
   constructor() {
+    this.el = document.querySelector("#slots");
+    this.modal = new Modal(this.el);
+    this.modal.openEl("#abrirSaveBtn");
+    this.modal.closeEl("#slots .close");
+    this.container = this.el.querySelector("main");
 
+    this.numSlots = 6;
+    this.slots=[];
+    this.slotsEl=[];
+
+    for(let i=0;i<this.numSlots;i++)
+      this.slots.push(this.getData(i));
+    this.generateDOM();
   }
 
   goTo(slot){
-    this.setData(this.getData(slot));
-  }
+    let data = this.getData(slot);
+    if(data){
+      // Update localStorage
+      this.setData(data);
 
+      // Update game
+      this.updateSlots();
+      this.updateEl(slot);
+      loja.updateAll("counter");
+    }
+  }
   getData(slot){
     let obj = localStorage.getItem("slot-"+slot);
     if(obj) return JSON.parse(obj);
+    else return false;
   }
-
   setData(obj){
     farm.importObj(obj.farm);
     user.importObj(obj.user);
   }
-
   saveData(slot){
     let obj = {
       user: user.exportObj(),
       farm: farm.exportObj()
     }
 
+
+    // Update localStorage
     obj = JSON.stringify(obj);
     localStorage.setItem('slot-'+slot,obj);
+
+    // Update game
+    this.updateSlots();
+    this.updateEl(slot);
+  }
+  deleteData(slot){
+    // Update localStorage
+    localStorage.removeItem('slot-'+slot);
+
+    // Update game
+    this.updateSlots();
+    this.updateEl(slot);
+  }
+
+  updateSlots(){
+    this.slots.forEach((el,i)=>
+      this.slots[i] = this.getData(i)
+    );
+  }
+
+  generateDOM(){
+    this.container.innerHTML = "";
+    this.slots.forEach((slot,i)=>{
+      let el = TEMP.render("slot"),
+          saveBtn = el.querySelector(".save"),
+          loadBtn = el.querySelector(".load"),
+          deleteBtn = el.querySelector(".delete");
+
+      saveBtn.addEventListener("click",function(){
+        this.saveData(i);
+      }.bind(this));
+
+      deleteBtn.addEventListener("click",function(){
+        this.deleteData(i);
+      }.bind(this));
+
+      loadBtn.addEventListener("click",function(){
+        this.goTo(i);
+      }.bind(this));
+
+      this.slotsEl.push(el);
+      this.container.append(el);
+      this.updateEl(i);
+    });
+  }
+
+  updateEl(i){
+    let el = this.slotsEl[i],
+        slot = this.slots[i];
+
+    if(slot){
+      let user = slot.user;
+      el.querySelector(".nome").innerHTML = user.nome;
+      el.querySelector(".inicio").innerHTML = formatDate(user.inicio);
+      el.querySelector(".ultimo").innerHTML = formatDate(user.ultimo);
+      el.querySelector(".dinheiro").innerHTML = user.money;
+      el.classList.remove("vazio");
+      el.classList.add("naoVazio");
+    } else {
+      el.classList.add("vazio");
+      el.classList.remove("naoVazio");
+    }
   }
 }
 
@@ -545,13 +655,20 @@ TEMP.loadTemplates(()=>{
   loja = new Loja();
   caixa = new Box();
   display = new Display();
-  user = new User({armazem:{"Batata Comum": 10}});
+  user = new User();
   farm = new Farm();
+
   loja.updateAll("counter");
   user.moneyUpdate();
   caixa.generateDOM();
 
   farm.resetDOM();
   user.select("Batata Comum");
+
+  // TEMP:
+  save.goTo(0);
+  tempo.add(()=>{save.saveData(0)});
+  // END TEMP
+
   tempo.start();
 });
