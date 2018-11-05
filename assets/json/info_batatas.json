@@ -1,0 +1,23 @@
+{
+  "Batata Comum": {
+    "descricao": "É a sua primeira batata!",
+    "img": "potatoes.png",
+    "preco": 1,
+    "retorno": 2,
+    "tempo": 10
+  },
+  "Batata Test": {
+    "descricao": "Tudo é apenas uma simulação",
+    "img": "potato.png",
+    "preco": 15,
+    "retorno": 35,
+    "tempo": 30
+  },
+  "Batata Testa": {
+    "descricao": "Não é uma testa de verdade",
+    "img": "potato.png",
+    "preco": 30,
+    "retorno": 75,
+    "tempo": 60
+  }
+}

@@ -1,33 +1,6 @@
-// Esse codigo depende do template.js
+// Esse codigo depende do template.js (feita por eumsmo)
 const Img_batata_folder = "assets/img/";
-const Terra = "";
-const InfoBatatas = {
-  "Batata Comum": {
-    "descricao": "É a sua primeira batata!",
-    "img": "potatoes.png",
-    "preco": 1,
-    "retorno": 2,
-    "tempo": 10
-  },
-  "Batata Test": {
-    "descricao": "Tudo é apenas uma simulação",
-    "img": "potato.png",
-    "preco": 15,
-    "retorno": 35,
-    "tempo": 30
-  },
-  "Batata Testa": {
-    "descricao": "Não é uma testa de verdade",
-    "img": "potato.png",
-    "preco": 30,
-    "retorno": 75,
-    "tempo": 60
-  }
-};
-
-const InfoUpgrades = {
-  "": ""
-};
+let InfoBatatas, InfoUpgrades;
 
 function msToTime(duration) {
   var milliseconds = parseInt((duration % 1000) / 100),
@@ -53,6 +26,7 @@ function formatDate(date){
   return dia+'/'+mes+'/'+ano;
 }
 
+// Carregar templates usando template.js
 const TEMP = new Template();
 TEMP.setFolder("assets/templates")
 .addTemplate({
@@ -62,67 +36,74 @@ TEMP.setFolder("assets/templates")
   slot: "slot.html"
 });
 
+// Inicializar variaveis
 let farm, user, tempo, loja, display, caixa, save;
 
+// Estrutura de uma terra plantada
 class Batata{
   constructor(tipo){
     let agora = Date.now(),
         fimR = InfoBatatas[tipo].tempo*1000;
-    this.tipo = tipo;
+
+    this.tipo = tipo; // Nome referente a batata plantada
     this.pronta = false;
     this.tempo = {
-      inicial: agora,
-      final_relativa: fimR,
-      final: fimR+agora,
-      progresso: 0
+      inicial: agora, // Momento que foi plantada
+      final_relativa: fimR, // Duração
+      final: fimR+agora, // Momento para terminar
+      progresso: 0 // Progresso
     };
   }
 }
 class Farm{
-  constructor({arr,size}={}){
-    this.arr = arr||[];
+  constructor(){
+    this.arr = []; // Vetor com objetos sobre cada terra
 
-    this.grids = [];
-    this.xSize = size||5;
-    this.ySize = size||5;
+    this.grids = []; // Vetor com elemento HTML de cada terra
+    // Tamanho da area de plantio (sempre x = y)
+    this.xSize;
+    this.ySize;
 
-    this.farmEl = document.querySelector("#farm");
-    tempo.add(this.updateTime.bind(this));
-    this.fill(this.xSize,this.ySize);
+
+    this.farmEl = document.querySelector("#farm"); // Elemento HTML da area de plantio
+    tempo.add(this.updateTime.bind(this)); // Adiciona função de atualizar terras ao cronômetro*
+    this.fill(5,5); // Inicia area de plantio
   }
+
+  // Atualiza cada terra do DOM
   updateDOM(){
-    let x = this.arr.length,
-        y = this.arr[0].length;
 
-    for(let i=0;i<x;i++)
-      for(let j=0;j<y;j++){
-        let el = this.grids[i][j],
-            img = el.querySelector('img');
+    this.forEach("grids",(el,i,j)=>{ // Percorre this.grids como dois for(i,j)
+      let img = el.querySelector('img'); // Seleciona a imagem de uma unica terra
 
-        if(this.arr[i][j]){
-            el.classList.add("plantado");
-            img.src = Img_batata_folder+ InfoBatatas[this.arr[i][j].tipo].img;
-        } else if(el.classList.contains("plantado")){
-            el.classList.remove("plantado");
-            img.src="";
-        }
+      if(this.arr[i][j]){ // Se posição está plantada
+          el.classList.add("plantado"); // Adiciona classe "plantado"
+          img.src = Img_batata_folder+ InfoBatatas[this.arr[i][j].tipo].img; // Coloca imagem de batata na terra
+      } else if(el.classList.contains("plantado")){ // Senão, se o elemento DOM não está atualizado
+          el.classList.remove("plantado"); // Remove classe "plantado"
+          img.src=""; // Remove imagem de batata da terra
       }
+    });
   }
+
+  // Reseta o conteudo da area de plantio (DOM)
   resetDOM(){
-    let that = this;
-    let x = this.arr.length,
-        y = this.arr[0].length;
-    this.farmEl.innerHTML = "";
-    this.grids = [];
+    let x = this.xSize,
+        y = this.ySize;
+
+    this.farmEl.innerHTML = ""; // Limpa o conteudo da area de plantio
+    this.grids = []; // Limpa o vetor de elementos
 
     for(let i=0;i<x;i++){
-      this.grids[i] = [];
+      this.grids[i] = []; // Inicia matriz
       for(let j=0;j<y;j++){
+        // Cria elemento html baseado no template "terra"
         let el = TEMP.render("terra",{x:i,y:j});
 
+        // Adiciona [Evento de click] ao elemento
         el.addEventListener('click',this.clickEvent.bind(this));
-        this.grids[i][j] = el;
-        this.farmEl.append(el);
+        this.grids[i][j] = el; // Adiciona elemento na matriz
+        this.farmEl.append(el); // Coloca elemento no DOM
       }
     }
 
@@ -130,17 +111,21 @@ class Farm{
     this.farmEl.style.gridTemplateRows = `repeat(${y}),${100/y}%`;
     this.updateDOM();
   }
-  clickEvent(evt){
-    let el = evt.currentTarget,
-        i = el.dataset.x,
-        j = el.dataset.y,
-        grid = this.arr[i][j];
 
+  // [Evento de click] ao clicar na terra
+  clickEvent(evt){
+    let el = evt.currentTarget, //Pega o elemento clicado
+        i = el.dataset.x, // Encontra x na matriz
+        j = el.dataset.y, // Encontra y na matriz
+        grid = this.arr[i][j]; // Encontra elemento na matriz
+
+    // Se batata estiver pronta, colher
     if(grid && grid.pronta) return this.collectBatata(i,j);
 
+    // To construindo isso ainda :|
     switch (user.mode){
       case "plant":
-        if(!grid) this.addBatata(i,j);
+        if(!grid) this.addBatata(i,j); // Se terra está vazia, plantar
         break;
       case "remove":
         break;
@@ -149,114 +134,147 @@ class Farm{
     }
 
   }
+
+  // Ajusta tamanho da area de plantio
   fill(x,y){
+    // Atualiza propriedades xSize e ySize (sempre x = y)
     this.xSize = x;
     this.ySize = y;
 
-    if(this.arr.length>x)
-      this.arr = this.arr.slice(0,x);
+    if(this.arr.length>x) // Se a matriz for maior que o tamanho
+      this.arr = this.arr.slice(0,x); // Corta matriz para o tamanho
+
 
     for(let i=0;i<x;i++){
-      if(this.arr[i] && this.arr[i].length>y)
-        this.arr[i] = this.arr[i].slice(0,y);
+      if(this.arr[i] && this.arr[i].length>y) // Se o vetor for maior que o tamanho
+        this.arr[i] = this.arr[i].slice(0,y); // Corta o vetor para o tamanho
 
-      this.arr[i] = this.arr[i]||[];
-      for(let j=0;j<y;j++) this.arr[i][j] = this.arr[i][j] || false;
+      this.arr[i] = this.arr[i]||[]; // Se existir, mantem, caso contrário, cria nova
+      for(let j=0;j<y;j++)
+        this.arr[i][j] = this.arr[i][j] || false; // Se existir, mantem, caso contrário define como falso (não tem)
     }
 
-    this.resetDOM();
+    this.resetDOM(); // Atualiza o DOM
   }
-  forEach(callback){ //if callback returns false, stop forEach.
-    let x = this.arr.length,
-        y = this.arr[0].length;
 
-    for(let i=0;i<x;i++)
-      for(let j=0;j<y;j++){
-        if(callback(this.arr[i][j],i,j)===false)
+  // Percorre this[what] como dois for(i,j)
+  forEach(what, callback){
+    /* Parametros de callback: (el, i, j)
+     * el: o elemento atual
+     * i,j: o indice do elemento na matriz
+     */
+
+    for(let i=0;i<this.xSize;i++)
+      for(let j=0;j<this.ySize;j++){
+        // Chama callback com os parametros
+        // Se callback retornar falso, termina forEach
+        if(callback(this[what][i][j],i,j)===false)
           return;
       }
   }
 
+  // Adiciona batata nas posição do parametro
   addBatata(i,j){
+    // Se os indices estão no limite
+    // E a posição está vazia
     if(i<this.xSize && j<this.ySize && this.arr[i][j]===false){
+
+      // Se o usuario tiver selecionado uma batata, e é posição planta-la
       if(user.hasSelected() && user.plant()){
-        this.arr[i][j] = new Batata(user.selected);
-        this.updateDOM();
+        this.arr[i][j] = new Batata(user.selected); // Coloca batata nos indices selecionados
+        this.updateDOM(); // Atualiza o DOM
         return true;
-      } else if(user.hasSelected())
-        console.error("Usuario não tem nenhuma batata do tipo!");
-      else
+      } else if(user.hasSelected()) // Se não foi possivel plantar a batata, mas o usúario tem alguma batata selecionada
+        // Dá console.warn alertando
+        console.warn("Usuario não tem nenhuma batata do tipo!");
+      else // Caso o usuário não tenha selecionado batata, console.warn alertando
         console.warn("Usuario não selecionou nenhuma batata!");
+
       return false;
-    } else return false;
+    }
+    else return false; // Caso indices não estejam no limite
   }
+
+  // Remove batata nas posições do parametro
   removeBatata(i,j){
-    if(i<this.xSize && j<this.ySize){
-      this.grids[i][j].classList.remove("pronta");
-      this.arr[i][j]=false;
-      this.updateDOM();
+    // Se os indices estão no limite
+    // E a posição não está vazia
+    if(i<this.xSize && j<this.ySize && this.arr[i][j]!=false){
+      this.arr[i][j]=false; // Define posição como falsa (vazia)
+      this.updateDOM(); // Atualiza o DOM
       return true;
     } else return false;
   }
+
+  // Pega batata pronta nas posições do parametro
   collectBatata(i,j){
-    let batata = this.arr[i][j];
-    if(batata.pronta){
-      user.collect(batata);
-      this.removeBatata(i,j);
+    let batata = this.arr[i][j]; //Seleciona batata
+    if(batata.pronta){ // Se batata está pronta
+      user.collect(batata); // Coleta
+      this.removeBatata(i,j); // Remove batata
     }
   }
+
+  // Atualiza progresso de batata plantada
   updateProgress(time,i,j){
-    let mainEl = this.grids[i][j],
-        progressEl = mainEl.querySelector(".progresso"),
-        indicadorEl = mainEl.querySelector(".indicador"),
-        porcentagem = time.progresso/time.final_relativa;
+    let mainEl = this.grids[i][j], // Seleciona a batata
+        progressEl = mainEl.querySelector(".progresso"), // Seleciona a barra de progresso
+        indicadorEl = mainEl.querySelector(".indicador"), // Seleciona o indicador de tempo
+        porcentagem = time.progresso/time.final_relativa; // Calcula porcentagem
 
-
+    // Atualiza DOM
     progressEl.style.width = (porcentagem*100)+"%";
     indicadorEl.innerHTML = msToTime(time.final-time.inicial-time.progresso);
     //console.log(mainEl,progressEl,indicadorEl);
   }
 
+  // Marca batata como pronta
   setReady(i,j){
-    let mainEl = this.grids[i][j],
-        progressEl = mainEl.querySelector(".progresso"),
-        indicadorEl = mainEl.querySelector(".indicador");
+    let mainEl = this.grids[i][j], // Seleciona batata
+        progressEl = mainEl.querySelector(".progresso"), // Seleciona barra de progresso
+        indicadorEl = mainEl.querySelector(".indicador"); // Seleciona indicador de tempo
 
-    console.log("ready!");
-    if(this.arr[i][j].pronta){
-      progressEl.style.width = "100%";
-      indicadorEl.innerHTML = "Pronto!";
-      mainEl.classList.add("pronta");
+    console.log("Pronto!");
+    if(this.arr[i][j].pronta){ // Se batata estiver pronta
+      progressEl.style.width = "100%"; // Marca barra de progresso como 100%
+      indicadorEl.innerHTML = "Pronto!"; // Marca o indicador como "Pronto!"
+      mainEl.classList.add("pronta"); // Adiciona classe "pronta"
     }
   }
 
+  // Atualiza progresso do objeto
   updateTime(stop){
-    let that = this;
+
     let agora = Date.now();
-    this.forEach(function(el,i,j){
-      if(el && !el.pronta){
-        let tempo = el.tempo;
-        tempo.progresso = agora-tempo.inicial;
-        if(tempo.progresso>=tempo.final_relativa){
-          el.pronta = true;
-          that.setReady(i,j);
-        } else {
+    this.forEach("arr",(el,i,j)=>{
+      if(el && !el.pronta){ // Se o elemento não estiver pronto
+        let tempo = el.tempo; // Seleciona tempo da batata
+        tempo.progresso = agora-tempo.inicial; // Atualiza progresso da batata
+
+        if(tempo.progresso>=tempo.final_relativa){ // Se o progresso estiver completo
+          el.pronta = true; // Marca batata como pronta
+          that.setReady(i,j); // Chama função para marcar o elemento da batata
+        } else {  // Caso não estiver completo
           this.updateProgress(tempo,i,j);
         }
       }
-    }.bind(this));
+    });
   }
 
+  // Função de importar valores
   importObj(obj){
     this.arr = obj.arr||[];
     this.xSize = obj.size||5;
     this.ySize = obj.size||5;
     this.fill(this.xSize,this.ySize);
-    /* Update already ready */
-    this.forEach((el,i,j)=>{
+
+    // Atualiza elementos que já estão pronto
+    this.forEach("arr",(el,i,j)=>{
       if(el && el.pronta) this.setReady(i,j);
     });
   }
+
+  // Função de exportar valores
   exportObj(){
     return {
       arr: this.arr,
@@ -264,6 +282,7 @@ class Farm{
     };
   }
 }
+
 class Tempo {
   constructor(every){
     this.callbacks=[];
@@ -649,7 +668,7 @@ class Save {
   }
 }
 
-TEMP.loadTemplates(()=>{
+function main(){
   save = new Save();
   tempo = new Tempo(10);
   loja = new Loja();
@@ -671,4 +690,16 @@ TEMP.loadTemplates(()=>{
   // END TEMP
 
   tempo.start();
+}
+
+// Pegar informações por Fetch (requisição http)
+
+let fetchInfoBatatas = fetch("assets/json/info_batatas.json").then(res=>res.json()),
+    fetchInfoUpgrades = fetch("assets/json/info_upgrades.json").then(res=>res.json());
+
+Promise.all([fetchInfoBatatas,fetchInfoUpgrades])
+.then(res=> {
+  InfoBatatas = res[0];
+  InfoUpgrades = res[1];
+  TEMP.loadTemplates(main);
 });
