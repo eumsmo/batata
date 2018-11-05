@@ -253,7 +253,7 @@ class Farm{
 
         if(tempo.progresso>=tempo.final_relativa){ // Se o progresso estiver completo
           el.pronta = true; // Marca batata como pronta
-          that.setReady(i,j); // Chama função para marcar o elemento da batata
+          this.setReady(i,j); // Chama função para marcar o elemento da batata
         } else {  // Caso não estiver completo
           this.updateProgress(tempo,i,j);
         }
