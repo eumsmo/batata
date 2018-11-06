@@ -178,15 +178,16 @@ class Farm{
     // Se os indices estão no limite
     // E a posição está vazia
     if(i<this.xSize && j<this.ySize && this.arr[i][j]===false){
-
+      let selected = user.selected;
       // Se o usuario tiver selecionado uma batata, e é posição planta-la
       if(user.hasSelected() && user.plant()){
-        this.arr[i][j] = new Batata(user.selected); // Coloca batata nos indices selecionados
+        this.arr[i][j] = new Batata(selected); // Coloca batata nos indices selecionados
         this.updateDOM(); // Atualiza o DOM
         return true;
-      } else if(user.hasSelected()) // Se não foi possivel plantar a batata, mas o usúario tem alguma batata selecionada
-        // Dá console.warn alertando
-        console.warn("Usuario não tem nenhuma batata do tipo!");
+      } else if(user.hasSelected()){ // Se não foi possivel plantar a batata, mas o usúario tem alguma batata selecionada
+          // Dá console.warn alertando
+          console.warn("Usuario não tem nenhuma batata do tipo!");
+      }
       else // Caso o usuário não tenha selecionado batata, console.warn alertando
         console.warn("Usuario não selecionou nenhuma batata!");
 
@@ -409,13 +410,38 @@ class Loja{
 }
 class Display{
   constructor(){
+    this.tempoAnimacao = 1000;
+
     this.displayMoney = document.querySelector("#display_money");
+    this.selected = document.querySelector("#selecionada");
+    this.displaySelected = document.querySelector("#selecionada span");
   }
 
   moneyFormat(val){return val.toFixed(2)}
 
   updateMoney(){
     this.displayMoney.innerHTML = this.moneyFormat(user.money);
+  }
+
+  updateSelected(passo){
+    let that = this;
+    this.selected.classList.add("animation");
+
+    if(!passo){
+      setTimeout(()=>that.updateSelected("remover animacao"),this.tempoAnimacao);
+      setTimeout(()=>that.updateSelected("mudar conteudo"),this.tempoAnimacao/2);
+
+    } else if(passo == "remover animacao"){
+      this.selected.classList.remove("animation");
+    } else if(passo == "mudar conteudo"){
+      if(user.hasSelected()){
+        that.displaySelected.innerHTML = user.selected;
+      }
+      else {
+        that.displaySelected.innerHTML = "";
+      }
+    }
+
   }
 
 }
@@ -494,6 +520,14 @@ class User{
 
     for(let batata in InfoBatatas)
       this.armazem[batata] = this.armazem[batata]||0;
+
+    this.conteudo = document.querySelector("body > main");
+    this.conteudo.addEventListener("click",this.clickEvtOutise.bind(this));
+  }
+
+  clickEvtOutise(evt){
+    let el = evt.target;
+    if(el.parentElement == this.conteudo) this.select("none");
   }
 
   moneyUpdate(){
@@ -505,6 +539,7 @@ class User{
   }
   select(tipo){
     this.selected = tipo;
+    display.updateSelected();
   }
   buy(tipo){
     let batata = InfoBatatas[tipo];
@@ -521,6 +556,8 @@ class User{
   plant(){
     if(this.hasBatata(this.selected)){
       this.armazem[this.selected]--;
+      if(this.armazem[this.selected]==0)
+        this.select("none");
       loja.updateAll("counter");
       caixa.updateDOM();
       return true;
@@ -682,7 +719,7 @@ function main(){
   caixa.generateDOM();
 
   farm.resetDOM();
-  user.select("Batata Comum");
+  user.select("none");
 
   // TEMP:
   save.goTo(0);

@@ -62,3 +62,36 @@
   background-repeat: no-repeat;
   background-color: #793910;
 }
+
+#selecionada{
+  position: absolute;
+  bottom: 0;
+  left: .25em;
+
+  width: unset;
+  height: unset;
+  font-size: 2.25em;
+  color: white;
+
+  opacity: 1;
+  z-index: 7;
+  font-family: 'Roboto Mono', monospace;
+
+  /*transition: .5s ease;*/
+}
+
+#selecionada.animation{
+  animation: vaiEVolta .5s ease-in-out 0s 2 alternate;
+}
+
+@keyframes vaiEVolta{
+  from{
+    bottom: 0;
+    opacity: 1;
+  }
+
+  to{
+    bottom: -2.25em;
+    opacity: 0;
+  }
+}
