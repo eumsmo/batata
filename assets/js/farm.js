@@ -425,21 +425,27 @@ class Display{
 
   updateSelected(passo){
     let that = this;
-    this.selected.classList.add("animation");
 
-    if(!passo){
-      setTimeout(()=>that.updateSelected("remover animacao"),this.tempoAnimacao);
-      setTimeout(()=>that.updateSelected("mudar conteudo"),this.tempoAnimacao/2);
-
-    } else if(passo == "remover animacao"){
-      this.selected.classList.remove("animation");
-    } else if(passo == "mudar conteudo"){
-      if(user.hasSelected()){
-        that.displaySelected.innerHTML = user.selected;
-      }
-      else {
-        that.displaySelected.innerHTML = "";
-      }
+    switch(passo){
+      case "remover animacao":
+        this.selected.classList.remove("quickAnimation");
+        this.selected.classList.remove("animation");
+        break;
+      case "mudar conteudo":
+        if(user.hasSelected()) this.displaySelected.innerHTML = user.selected;
+        else this.displaySelected.innerHTML = "";
+        break;
+      case undefined: // Primeira chamada
+        if(this.displaySelected.innerHTML!=""){ //Se o elemento tinha algo escrito, roda toda animação
+          this.selected.classList.add("animation");
+          setTimeout(()=>that.updateSelected("remover animacao"),this.tempoAnimacao);
+          setTimeout(()=>that.updateSelected("mudar conteudo"),this.tempoAnimacao/2);
+        } else { // Caso esteja vazio, roda animação rápida
+          this.selected.classList.add("quickAnimation");            
+          setTimeout(()=>that.updateSelected("remover animacao"),this.tempoAnimacao/2);                
+          this.updateSelected("mudar conteudo");
+        }
+        break;
     }
 
   }
