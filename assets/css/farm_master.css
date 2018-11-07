@@ -59,12 +59,20 @@ body > main{
   #abrirComprarBtn{
     display: none;
   }
+
+  .barra{
+    font-size: 2.5vh;
+  }
 }
 
 @media (orientation: portrait) {
   #farm{
     width: 70vw;
     height: 70vw;
+  }
+
+  .barra{
+    font-size: 2.5vw;
   }
 }
 

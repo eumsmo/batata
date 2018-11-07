@@ -120,7 +120,9 @@ class Farm{
         grid = this.arr[i][j]; // Encontra elemento na matriz
 
     // Se batata estiver pronta, colher
-    if(grid && grid.pronta) return this.collectBatata(i,j);
+    if(grid && grid.pronta){
+      return this.collectBatata(i,j,evt);
+    }
 
     // To construindo isso ainda :|
     switch (user.mode){
@@ -208,11 +210,13 @@ class Farm{
   }
 
   // Pega batata pronta nas posições do parametro
-  collectBatata(i,j){
+  collectBatata(i,j,evt){
     let batata = this.arr[i][j]; //Seleciona batata
     if(batata.pronta){ // Se batata está pronta
+      let val = InfoBatatas[batata.tipo].retorno;
       user.collect(batata); // Coleta
       this.removeBatata(i,j); // Remove batata
+      display.coinAnimation(evt.pageX,evt.pageY,val); // Roda animação
     }
   }
 
@@ -410,8 +414,10 @@ class Loja{
 }
 class Display{
   constructor(){
-    this.tempoAnimacao = 1000;
+    this.selectTempo = 1000;
+    this.coinTempo = 500;
 
+    this.conteudoEl = document.querySelector("#conteudo");
     this.displayMoney = document.querySelector("#display_money");
     this.selected = document.querySelector("#selecionada");
     this.displaySelected = document.querySelector("#selecionada span");
@@ -438,11 +444,11 @@ class Display{
       case undefined: // Primeira chamada
         if(this.displaySelected.innerHTML!=""){ //Se o elemento tinha algo escrito, roda toda animação
           this.selected.classList.add("animation");
-          setTimeout(()=>that.updateSelected("remover animacao"),this.tempoAnimacao);
-          setTimeout(()=>that.updateSelected("mudar conteudo"),this.tempoAnimacao/2);
+          setTimeout(()=>that.updateSelected("remover animacao"),this.selectTempo);
+          setTimeout(()=>that.updateSelected("mudar conteudo"),this.selectTempo/2);
         } else { // Caso esteja vazio, roda animação rápida
           this.selected.classList.add("quickAnimation");            
-          setTimeout(()=>that.updateSelected("remover animacao"),this.tempoAnimacao/2);                
+          setTimeout(()=>that.updateSelected("remover animacao"),this.selectTempo/2);                
           this.updateSelected("mudar conteudo");
         }
         break;
@@ -450,6 +456,21 @@ class Display{
 
   }
 
+  coinAnimation(x,y,recebido){
+    let coin = document.createElement("span"),
+        img = new Image();
+    
+    img.src = "assets/img/potato.png";
+    
+    coin.style.top = `calc(${y+'px - 2.5em'})`;
+    coin.style.left = x+'px';
+    coin.innerHTML = "+"+this.moneyFormat(recebido);
+
+    coin.appendChild(img);
+    this.conteudoEl.appendChild(coin);
+    coin.classList.add("moedinha");
+    setTimeout(()=>coin.remove(),this.coinTempo-10);
+  }
 }
 class Box{
   constructor(){
