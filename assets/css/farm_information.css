@@ -22,45 +22,45 @@
     position: absolute;
     bottom: 0;
     left: .25em;
-  
+
     width: unset;
     height: unset;
     font-size: 2.25em;
     color: white;
-  
+
     opacity: 1;
     z-index: 7;
     font-family: 'Roboto Mono', monospace;
-  
+
     /*transition: .5s ease;*/
   }
-  
+
   #selecionada.animation{
-    animation: vaiEVolta .5s ease-in-out 0s 2 alternate;
+    animation: vaiEVolta .5s ease 0s 2 alternate;
   }
-  
+
   #selecionada.quickAnimation{
     animation: eVolta .5s ease-in-out 0s 1;
   }
-  
+
   @keyframes vaiEVolta{
     from{
       bottom: 0;
       opacity: 1;
     }
-  
+
     to{
       bottom: -2.25em;
       opacity: 0;
     }
   }
-  
+
   @keyframes eVolta{
     from{
       bottom: -2.25em;
       opacity: 0;
     }
-  
+
     to{
       bottom: 0;
       opacity: 1;
@@ -75,7 +75,7 @@
 
     opacity: 1;
     transform: translateX(-50%) translateY(0);
-    
+
     font-family: 'Roboto Mono', monospace;
     color: white;
 
@@ -89,12 +89,12 @@
     width: 1.5em;
     height: 1.5em;
     margin-left: .25em;
-  
+
   }
-  
+
   @keyframes sobe {
     from{}
-  
+
     to{
         opacity: 0;
         transform: translateX(-50%) translateY(-200%);
@@ -110,8 +110,8 @@
         font-size: 3vh;
     }
   }
-  
-  
+
+
   @media (orientation: portrait) {
     #selecionada{
       font-size: 3.5vh;

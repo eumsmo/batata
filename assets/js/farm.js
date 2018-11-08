@@ -25,6 +25,7 @@ function formatDate(date){
 
   return dia+'/'+mes+'/'+ano;
 }
+function moneyFormat(val){return val.toFixed(2)}
 
 // Carregar templates usando template.js
 const TEMP = new Template();
@@ -359,7 +360,12 @@ class Loja{
   generateDOM(){
     let el;
     for (let batata in InfoBatatas){
-      el  = TEMP.render("info_batata",InfoBatatas[batata],{nome: batata}); //Gera um item de batata para comprar
+      let info = InfoBatatas[batata];
+      el  = TEMP.render("info_batata",info,{
+        nome: batata,
+        preco:moneyFormat(info.preco),
+        retorno:moneyFormat(info.retorno)
+      }); //Gera um item de batata para comprar
       el.querySelector(".comprarBt").addEventListener("click",()=>this.buyButtonClickEvt(batata));
       el.querySelector(".img_quant").addEventListener("click",()=>this.plantClickEvt(batata));
       this.buyBatataHolder.appendChild(el);
@@ -447,8 +453,8 @@ class Display{
           setTimeout(()=>that.updateSelected("remover animacao"),this.selectTempo);
           setTimeout(()=>that.updateSelected("mudar conteudo"),this.selectTempo/2);
         } else { // Caso esteja vazio, roda animação rápida
-          this.selected.classList.add("quickAnimation");            
-          setTimeout(()=>that.updateSelected("remover animacao"),this.selectTempo/2);                
+          this.selected.classList.add("quickAnimation");
+          setTimeout(()=>that.updateSelected("remover animacao"),this.selectTempo/2);
           this.updateSelected("mudar conteudo");
         }
         break;
@@ -459,9 +465,9 @@ class Display{
   coinAnimation(x,y,recebido){
     let coin = document.createElement("span"),
         img = new Image();
-    
+
     img.src = "assets/img/potato.png";
-    
+
     coin.style.top = `calc(${y+'px - 2.5em'})`;
     coin.style.left = x+'px';
     coin.innerHTML = "+"+this.moneyFormat(recebido);
@@ -469,7 +475,7 @@ class Display{
     coin.appendChild(img);
     this.conteudoEl.appendChild(coin);
     coin.classList.add("moedinha");
-    setTimeout(()=>coin.remove(),this.coinTempo-10);
+    setTimeout(()=>coin.remove(),this.coinTempo-50);
   }
 }
 class Box{
