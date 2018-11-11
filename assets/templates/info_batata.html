@@ -3,13 +3,19 @@
     <img src="assets/img/${img}">
     <span class="quant">x 0</span>
   </div>
-  <div class="comprarBt">
-    <p>Comprar!</p>
-    <p>R$ ${preco}</p>
-  </div>
-  <div class="informacao">
-    <h2>${nome}</h2>
-    <p>${descricao}</p>
-    <p>Vale: R$ ${retorno}</p>
-  </div>
+  <section>
+    <header>
+      <h2>${nome}</h2>
+    </header>
+    <main>
+      <div class="comprarBt">
+        <p>Comprar!</p>
+        <p>R$ ${preco}</p>
+      </div>
+      <div class="informacao">
+        <p>${descricao}</p>
+        <p class="valor">Vale: R$ ${retorno}</p>
+      </div>
+    </main>
+  </section>
 </div>

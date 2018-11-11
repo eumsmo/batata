@@ -49,7 +49,7 @@
   filter: brightness(1.1);
 }
 
-#select section{
+#select > section{
   width: 100%;
   height: calc(100% - 3em);
   overflow: auto;
@@ -58,7 +58,7 @@
   padding: .75em;
 }
 
-#select header{
+#select > header{
   width: 100%;
   height: 3em;
   display: grid;
@@ -66,7 +66,7 @@
   /*grid-template-rows: 20% 20% 20% 20% 20%;*/
 }
 
-#select header span{
+#select > header span{
   text-align: center;
   line-height: 3em;
   color: white;
@@ -132,14 +132,26 @@ section.selectUpgrade{
   filter: brightness(0.9) grayscale(1);
 }*/
 
-.item_comprar .informacao{
-  width: 55%;
+.item_comprar main{
+  position: relative;
+}
+
+.item_comprar section{
   margin-left: 20%;
+}
+
+.item_comprar .informacao{
+/*  width: 55%;*/
+  margin-right: 6.25em;
 }
 
 .item_comprar .informacao p{
   margin: 0;
-  font-family:serif;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.item_comprar .informacao p.valor{
+    white-space: nowrap;
 }
 
 .item_comprar.selecionado img{
@@ -158,7 +170,7 @@ section.selectUpgrade{
   background-color: #793910;
 }
 
-.item_comprar .informacao h2{
+.item_comprar h2{
   display: inline;
   margin-top: 0;
   margin-left: 0;
@@ -167,15 +179,17 @@ section.selectUpgrade{
 
 .comprarBt{
   background-color: #4caf50;
-  /*width: 15%;*/
+  width: 5.5em;
+  height: 3em;
   position: absolute;
   right: 0;
-  margin-right: 10px;
+  margin-right: .5em;
   top: 50%;
   transform: translateY(-50%);
 
   padding: 5px;
   border-radius: 2.5px;
+  box-sizing: border-box;
 }
 
 .compravel .comprarBt:hover{
@@ -193,6 +207,7 @@ section.selectUpgrade{
   text-align: center;
   color: white;
   font-family: 'Roboto Mono', monospace;
+  white-space: nowrap;
 }
 
 .img_quant{

@@ -19,5 +19,12 @@
     "preco": 50,
     "retorno": 75,
     "tempo": 60
+  },
+  "Batata Azul": {
+    "descricao": "A mesma batata, só que azul",
+    "img": "potatoes.png",
+    "preco": 250,
+    "retorno": 300,
+    "tempo": 180
   }
 }

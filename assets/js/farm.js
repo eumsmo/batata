@@ -1,4 +1,4 @@
-// Esse codigo depende do template.js (feita por eumsmo)
+//(function(){// Esse codigo depende do template.js (feita por eumsmo)
 const Img_batata_folder = "assets/img/";
 let InfoBatatas, InfoUpgrades;
 
@@ -32,13 +32,15 @@ const TEMP = new Template();
 TEMP.setFolder("assets/templates")
 .addTemplate({
   info_batata: "info_batata.html",
+  upgrades: "upgrades.html",
   terra: "terra.html",
   item: "item.html",
   slot: "slot.html"
 });
 
 // Inicializar variaveis
-let farm, user, tempo, loja, display, caixa, save;
+let farm, upgrades, user, tempo, loja, display, caixa, save;
+let all; //Objeto aponta para todas variaveis
 
 // Estrutura de uma terra plantada
 class Batata{
@@ -68,12 +70,13 @@ class Farm{
 
     this.farmEl = document.querySelector("#farm"); // Elemento HTML da area de plantio
     tempo.add(this.updateTime.bind(this)); // Adiciona função de atualizar terras ao cronômetro*
-    this.fill(5,5); // Inicia area de plantio
+    this.fill(4,4); // Inicia area de plantio
   }
 
-  // Atualiza cada terra do DOM
+// Atualiza DOM
   updateDOM(){
 
+    // Atualiza cada terra do DOM
     this.forEach("grids",(el,i,j)=>{ // Percorre this.grids como dois for(i,j)
       let img = el.querySelector('img'); // Seleciona a imagem de uma unica terra
 
@@ -84,6 +87,11 @@ class Farm{
           el.classList.remove("plantado"); // Remove classe "plantado"
           img.src=""; // Remove imagem de batata da terra
       }
+    });
+
+    // Atualiza elementos que já estão pronto
+    this.forEach("arr",(el,i,j)=>{
+      if(el && el.pronta) this.setReady(i,j);
     });
   }
 
@@ -240,7 +248,6 @@ class Farm{
         progressEl = mainEl.querySelector(".progresso"), // Seleciona barra de progresso
         indicadorEl = mainEl.querySelector(".indicador"); // Seleciona indicador de tempo
 
-    console.log("Pronto!");
     if(this.arr[i][j].pronta){ // Se batata estiver pronta
       progressEl.style.width = "100%"; // Marca barra de progresso como 100%
       indicadorEl.innerHTML = "Pronto!"; // Marca o indicador como "Pronto!"
@@ -270,22 +277,61 @@ class Farm{
   // Função de importar valores
   importObj(obj){
     this.arr = obj.arr||[];
-    this.xSize = obj.size||5;
-    this.ySize = obj.size||5;
+    /*this.xSize = obj.size||5;
+    this.ySize = obj.size||5;*/
     this.fill(this.xSize,this.ySize);
-
-    // Atualiza elementos que já estão pronto
-    this.forEach("arr",(el,i,j)=>{
-      if(el && el.pronta) this.setReady(i,j);
-    });
   }
 
   // Função de exportar valores
   exportObj(){
     return {
-      arr: this.arr,
-      size: this.xSize
+      arr: this.arr/*,
+      size: this.xSize*/
     };
+  }
+}
+
+class Upgrades{
+  constructor(){
+    this.all = {};
+    for (let upgrade in InfoUpgrades)
+      this.add(upgrade);
+
+  }
+
+  add(name,upgrade){
+    this.all[name] = false;
+  }
+
+  buy(name){
+    let upgrade = InfoUpgrades[name];
+    if(upgrade && !this.all[name] && user.money >= upgrade.preco){
+      user.money -= upgrade.preco;
+      this.all[name]=true;
+      user.addUpgrade(name);
+      this.exec(name);
+      return true;
+    }
+    return false;
+  }
+
+  exec(name){
+    let upgrade = InfoUpgrades[name],
+        func = upgrade.exec;
+
+    for (let where in func){
+      let part = all[where], effects=func[where];
+      if(effects.constructor === Array){
+        effects.forEach(effect=>{
+          if(effect.constructor === Array){
+            let args = effect.slice(1);
+            part[effect[0]](...args);
+          } else part[effect]();
+        });
+      }
+      else part[effects]();
+    }
+
   }
 }
 
@@ -323,15 +369,18 @@ class Tempo {
 }
 class Loja{
   constructor(){
-    this.batatasEl = {};
-
-    this.buyBatataHolder = document.querySelector("section.selectBatata");
-    this.buyUpgradeHolder = document.querySelector("section.selectUpgrade");
-
     this.buyMenu = document.querySelector("#select");
     this.modal = new Modal(this.buyMenu);
     this.modal.openEl("#abrirComprarBtn");
     this.modal.closeEl("#select .close");
+
+    this.noUpgradeEl;
+
+    this.batatasEl = {};
+    this.upgradesEl = {};
+
+    this.buyBatataHolder = document.querySelector("section.selectBatata");
+    this.buyUpgradeHolder = document.querySelector("section.selectUpgrade");
 
     this.tabBtBatata = document.querySelector("span.selectBatata");
     this.tabBtUpgrade = document.querySelector("span.selectUpgrade");
@@ -341,22 +390,59 @@ class Loja{
 
   }
 
-  isOpen(){
-    return !this.buyMenu.classList.contains("hide");
-  }
-
-  buyButtonClickEvt(batata){
-    if(user.buy(batata))
-      this.updateCounter(batata);
-  }
-
+  // Exclusivo da batata
   plantClickEvt(batata){
     if(user.hasBatata(batata)){
       user.select(batata);
       this.modal.close();
     }
   }
+  updateCounter(what,batata){
+    let el = this.batatasEl[batata];
+    el.querySelector(".quant").innerHTML = `x ${user.armazem[batata]}`;
+  }
 
+  // Exclusivo do upgrade
+  async updateUpgrade(upgrade){
+    let el = this.upgradesEl[upgrade];
+    await el.remove(); // elemento.remove() não é sincrona e não possui callback! É necessário assim esperar
+    delete this.upgradesEl[upgrade];
+
+    if(JSON.stringify(this.upgradesEl) == "{}")
+      this.buyUpgradeHolder.append(this.noUpgradeEl);
+
+  }
+
+  // Não exclusivos
+  updateAll(what){ //what = "counter", "buyable"
+    let str = what;
+    str = str.charAt(0).toUpperCase() + str.slice(1);
+    for (let batata in this.batatasEl)
+      this["update"+str]("batata",batata);
+
+    if(what=="buyable")
+      for (let upgrade in this.upgradesEl)
+        this.updateBuyable("upgrade",upgrade);
+  }
+  updateBuyable(what,el){
+    let current = this[what+'sEl'][el],
+        coiso = (what=="batata")? InfoBatatas[el] : InfoUpgrades[el];
+
+    if(user.money >= coiso.preco)
+      current.classList.add("compravel");
+    else
+      current.classList.remove("compravel");
+  }
+  buyButtonClickEvt(what,coiso){
+    if(what=="batata" && user.buy(coiso))
+      this.updateCounter(what,coiso);
+    else if(what=="upgrade" && upgrades.buy(coiso))
+      this.updateUpgrade(coiso);
+  }
+
+  isOpen(){
+    return !this.buyMenu.classList.contains("hide");
+  }
   generateDOM(){
     let el;
     for (let batata in InfoBatatas){
@@ -366,33 +452,35 @@ class Loja{
         preco:moneyFormat(info.preco),
         retorno:moneyFormat(info.retorno)
       }); //Gera um item de batata para comprar
-      el.querySelector(".comprarBt").addEventListener("click",()=>this.buyButtonClickEvt(batata));
+      el.querySelector(".comprarBt").addEventListener("click",()=>this.buyButtonClickEvt("batata",batata));
       el.querySelector(".img_quant").addEventListener("click",()=>this.plantClickEvt(batata));
       this.buyBatataHolder.appendChild(el);
       this.batatasEl[batata] = el;
     }
-  }
 
-  updateAll(what){ //what = "counter", "buyable"
-    let str = what;
-    str = str.charAt(0).toUpperCase() + str.slice(1);
-    for (let batata in this.batatasEl) {
-      this["update"+str](batata);
+    for(let upgrade in InfoUpgrades){
+      let info = InfoUpgrades[upgrade];
+      el = TEMP.render("upgrades",info,{
+        nome: upgrade,
+        preco:moneyFormat(info.preco)
+      });
+
+      let btn = el.querySelector(".comprarBt");
+
+      if(info.preco == 16){ // Ver se é um elemento em especifico
+        // Se sim, remove o botão e guarda elemento para o futuro
+        btn.remove();
+        el.querySelector('.informacao').style.marginRight = "0";
+        this.noUpgradeEl = el;
+      } else {
+        // Caso o contrário, segue normalmente
+        btn.addEventListener("click",()=>this.buyButtonClickEvt("upgrade",upgrade));
+
+        this.buyUpgradeHolder.appendChild(el);
+        this.upgradesEl[upgrade] = el;
+      }
     }
   }
-
-  updateCounter(batata){
-    let el = this.batatasEl[batata];
-    el.querySelector(".quant").innerHTML = `x ${user.armazem[batata]}`;
-  }
-  updateBuyable(batata){
-    let current = this.batatasEl[batata];
-    if(user.money >= InfoBatatas[batata].preco)
-      current.classList.add("compravel");
-    else
-      current.classList.remove("compravel");
-  }
-
   menuTabEvt(str){
     console.log(str);
     if(str==="batata"){
@@ -411,7 +499,6 @@ class Loja{
 
     }
   }
-
   manageDOM(){
     this.tabBtBatata.addEventListener("click",function(){this.menuTabEvt("batata")}.bind(this));
     this.tabBtUpgrade.addEventListener("click",function(){this.menuTabEvt("upgrade")}.bind(this));
@@ -536,7 +623,7 @@ class Box{
 class User{
   constructor(){
     //O proximo pedacinho de código apenas define que qualquer alteração na propriedade money, quando o usuario estiver na loja, irá atualizar os elementos da mesma
-    this._money = 1;
+    this._money = 0;
     Object.defineProperty(this,"money",{
       get(){return this._money;},
       set(val){
@@ -544,6 +631,8 @@ class User{
         this.moneyUpdate(val);
       }
     });
+
+    this.upgrades = [];
 
     this.mode = "plant"; // "none", "plant", "remove", "item"
     this.selected = "none";
@@ -563,6 +652,14 @@ class User{
     if(el.parentElement == this.conteudo) this.select("none");
   }
 
+  addMoney(quant){
+    console.log(quant);
+    this.money+=quant;
+  }
+
+  addUpgrade(upgrade){
+    user.upgrades.push(upgrade);
+  }
   moneyUpdate(){
     display.updateMoney();
     /*if(loja.isOpen())*/ loja.updateAll("buyable");
@@ -609,9 +706,18 @@ class User{
 
   importObj(obj){
     this.money = obj.money;
-    this.armazem = obj.armazem;
+
+    for (let item in obj.armazem) this.armazem[item] = obj.armazem[item];
+
+    obj.upgrades.forEach((upgrade,i)=>{
+      this.upgrades[i]=upgrade;
+      upgrades.exec(upgrade);
+      loja.updateUpgrade(upgrade);
+    });
+
     this.nome = obj.nome;
     this.dataInicio = obj.inicio;
+    console.log(farm.xSize,farm.ySize);
 
     caixa.updateDOM();
   }
@@ -619,6 +725,7 @@ class User{
     return {
       money: this.money,
       armazem: this.armazem,
+      upgrades: this.upgrades,
       nome: this.nome,
       inicio: this.dataInicio,
       ultimo: Date.now()
@@ -660,8 +767,8 @@ class Save {
     else return false;
   }
   setData(obj){
-    farm.importObj(obj.farm);
     user.importObj(obj.user);
+    farm.importObj(obj.farm);
   }
   saveData(slot){
     let obj = {
@@ -745,7 +852,9 @@ function main(){
   caixa = new Box();
   display = new Display();
   user = new User();
+  upgrades = new Upgrades();
   farm = new Farm();
+  all = {farm, upgrades, user, tempo, loja, display, caixa, save};
 
   loja.updateAll("counter");
   user.moneyUpdate();
@@ -773,3 +882,4 @@ Promise.all([fetchInfoBatatas,fetchInfoUpgrades])
   InfoUpgrades = res[1];
   TEMP.loadTemplates(main);
 });
+//})();

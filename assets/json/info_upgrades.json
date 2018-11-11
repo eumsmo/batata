@@ -1,1 +1,22 @@
-{}
+{
+  "Aquele do começo": {
+    "descricao": "Tá quebrado? Venha plantar batata com a gente!",
+    "img": "potatoes.png",
+    "preco": 0,
+    "exec": {
+      "user": [["addMoney",1]]
+    }
+  },
+  "Clube dos cinco": {
+    "descricao": "Quando você cresce o coração morre, mas a batata não.",
+    "img": "potatoes.png",
+    "preco": 555.5,
+    "exec": {
+      "farm": [["fill",5,5]]
+    }
+  },
+  "It's over, isn't it?": {
+    "descricao": "Não há mais upgrade algum. Volte em breve e talvez há de ter outro!",
+    "preco": 16
+  }
+}
