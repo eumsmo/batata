@@ -66,6 +66,7 @@ class Farm{
     // Tamanho da area de plantio (sempre x = y)
     this.xSize;
     this.ySize;
+    this.size;
 
 
     this.farmEl = document.querySelector("#farm"); // Elemento HTML da area de plantio
@@ -148,23 +149,25 @@ class Farm{
 
   // Ajusta tamanho da area de plantio
   fill(x,y){
-    // Atualiza propriedades xSize e ySize (sempre x = y)
-    this.xSize = x;
-    this.ySize = y;
+    if(x!=undefined){
+      // Atualiza propriedades xSize e ySize (sempre x = y)
+      this.xSize = x;
+      this.ySize = y;
+    }
+    this.size = this.xSize;
 
     if(this.arr.length>x) // Se a matriz for maior que o tamanho
       this.arr = this.arr.slice(0,x); // Corta matriz para o tamanho
 
 
-    for(let i=0;i<x;i++){
+    for(let i=0;i<this.xSize;i++){
       if(this.arr[i] && this.arr[i].length>y) // Se o vetor for maior que o tamanho
         this.arr[i] = this.arr[i].slice(0,y); // Corta o vetor para o tamanho
 
       this.arr[i] = this.arr[i]||[]; // Se existir, mantem, caso contrário, cria nova
-      for(let j=0;j<y;j++)
+      for(let j=0;j<this.ySize;j++)
         this.arr[i][j] = this.arr[i][j] || false; // Se existir, mantem, caso contrário define como falso (não tem)
     }
-
     this.resetDOM(); // Atualiza o DOM
   }
 
@@ -292,17 +295,39 @@ class Farm{
 }
 
 class Upgrades{
+  /*
+    exec: {
+      "campo que deseja modificar": {
+        "$propriedade": valor, // adiciona valor a propriedade
+        "propriedade": valor, // define valor a propriedade
+        "funcao": parametro, // código analisa automatica se é propriedade ou função
+        "funcao": [array], //ex: "funcao": [[1,2,3]] (1 parametro vetor)
+        "funcao": [parametros...] //ex: "funcao": [1,2,3] (3 parametros inteiros)
+      }
+    }
+  */
   constructor(){
     this.all = {};
-    for (let upgrade in InfoUpgrades)
+    this.if = {};
+
+    for (let upgrade in InfoUpgrades){
       this.add(upgrade);
+
+      // Controle se upgrade é aplicavel
+      let func = eval("()=>`"+InfoUpgrades[upgrade].if+"`");
+      this.if[upgrade]  = ()=> eval(func());
+    }
+
 
   }
 
   add(name,upgrade){
     this.all[name] = false;
   }
-
+  can(name){
+    let cmp = this.if[name];
+    return cmp();
+  }
   buy(name){
     let upgrade = InfoUpgrades[name];
     if(upgrade && !this.all[name] && user.money >= upgrade.preco){
@@ -314,12 +339,26 @@ class Upgrades{
     }
     return false;
   }
-
   exec(name){
+    if(!this.can(name)) return;
     let upgrade = InfoUpgrades[name],
         func = upgrade.exec;
 
     for (let where in func){
+      let cause = func[where], place = all[where];
+      for(let effect in cause){
+        let val = cause[effect];
+        if(place[effect] && place[effect].constructor == Function){
+          if(val.constructor != Array) place[effect](val);
+          else place[effect](...val);
+        } else {
+          if(effect.startsWith("$")) place[effect.slice(1)]+=val;
+          else place[effect]=val;
+        }
+      }
+    }
+
+    /*for (let where in func){
       let part = all[where], effects=func[where];
       if(effects.constructor === Array){
         effects.forEach(effect=>{
@@ -330,7 +369,7 @@ class Upgrades{
         });
       }
       else part[effects]();
-    }
+    }*/
 
   }
 }
@@ -711,13 +750,12 @@ class User{
 
     obj.upgrades.forEach((upgrade,i)=>{
       this.upgrades[i]=upgrade;
-      upgrades.exec(upgrade);
       loja.updateUpgrade(upgrade);
+      upgrades.exec(upgrade);
     });
 
     this.nome = obj.nome;
     this.dataInicio = obj.inicio;
-    console.log(farm.xSize,farm.ySize);
 
     caixa.updateDOM();
   }
@@ -767,6 +805,7 @@ class Save {
     else return false;
   }
   setData(obj){
+    console.log(farm.xSize);
     user.importObj(obj.user);
     farm.importObj(obj.farm);
   }
@@ -799,7 +838,6 @@ class Save {
       this.slots[i] = this.getData(i)
     );
   }
-
   generateDOM(){
     this.container.innerHTML = "";
     this.slots.forEach((slot,i)=>{
@@ -825,7 +863,6 @@ class Save {
       this.updateEl(i);
     });
   }
-
   updateEl(i){
     let el = this.slotsEl[i],
         slot = this.slots[i];

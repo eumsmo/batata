@@ -3,16 +3,18 @@
     "descricao": "Tá quebrado? Venha plantar batata com a gente!",
     "img": "potatoes.png",
     "preco": 0,
+    "if": "${user.money} <= 0",
     "exec": {
-      "user": [["addMoney",1]]
+      "user": {"$money": 1}
     }
   },
   "Clube dos cinco": {
     "descricao": "Quando você cresce o coração morre, mas a batata não.",
     "img": "potatoes.png",
     "preco": 555.5,
+    "if": "${farm.size} <= 4",
     "exec": {
-      "farm": [["fill",5,5]]
+      "farm":{"$xSize": 1,"$ySize": 1,"fill": []}
     }
   },
   "It's over, isn't it?": {
