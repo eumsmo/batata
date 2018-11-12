@@ -1,127 +1,140 @@
-#slots{
-  z-index: 9;
-  font-family: 'Roboto Mono', monospace;
-  /*height: 23.5em;
-  */
+#user{
+  background-color: #ffffff;
+  width: 85%;
   height: 80%;
-  width: 90%;
-  max-width: calc(325px + 3em);
-  background-color: #8a8a8a;
+  max-width: 350px;
+
+  z-index: 10;
+  font-family: 'Roboto Mono', monospace;
 }
 
-#slots > main{
-  overflow-y: auto;
-  height: calc(100% - 3.5em);
+@media (orientation: landscape){
+  #user{
+    max-width: 35vw;
+  }
 }
 
-#slots header{
+#user header{
+  height: 40%;
+  position: relative;
+
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  text-align: center;
-  background-color: #bcbcbc;
-  height: 2em;
-  font-size: 1.5em;
+  align-items: center;
+
+  background-image: url("../img/batata-doce.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-#slots h2{margin: 0}
+#user header > *{z-index: 2}
 
-.slot section{
-  background-color: white;
-  height: 7em;
-  max-width: 325px;
-  font-size: .9em;
+#user header::after{
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 1;
+  pointer-events: none;
+}
+
+#user .img{
+
+  width: 8.5em;
+  height: 8.5em;
+  margin-bottom: .5em;
+
+  display: block;
+  background-image: url("../img/batata-inglesa.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2.5px solid rgba(255,255,255,0.75);
+  box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.15);
+}
+
+#nome{
+
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  color: white;
+}
+
+#nome:focus{
+  outline: unset;
+}
+
+#user main{
+  position: relative;
+  height: 60%;
+  padding: 1em 12.5%;
+
+  box-sizing: border-box;
+}
+
+#informacoes{
+  width: 75%;
+  margin: 1em 0;
+
+  box-sizing: border-box;
+  border: 1px solid grey;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 0;
+}
+
+#informacoes p{
+  clear: both;
+  margin: 0 0;
+  padding: .25em .5em;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: .5em;
-  margin: .5em auto;
-  position: relative;
+  border-bottom: 1px solid grey;
 }
 
-.slot.vazio .naoVazio{display: none}
-.slot.naoVazio .vazio{display: none}
-
-.slot figure{
-  float: left;
-  position: relative;
-  height: 70%;
-  display: inline-block;
-  margin: 0;
-  background-color: #e5ba2e;
-  border-radius: 50%;
-}
-.slot img{
-  height: 100%;
-  border-radius: 50%;
-}
-.slot main{
-  width: 70%;
+#informacoes p:last-child{
+  border-bottom: unset;
 }
 
-.slot h2{
-  font-size: 1.25em;
-  width: 100%;
+#informacoes span{
+  max-width: 50%;
 }
 
-.slot h2, .slot p{
-  margin: 0;
-}
-
-.slot .icone{
-  height: 2em;
-  padding: .45em;
-  position: absolute;
-  bottom: -1em;
-}
-
-.slot .icone img{
-  border-radius: 0;
-}
-
-.icone.save{
-  background-color: #4caf50;
-  left: 0;
-}
-
-.icone.load{
-  background-color: #00bcd4;
-  right: 0;
-}
-
-.icone.delete{
-  background-color: #f44336;
-  right: -.4em;
-  bottom: -.4em;
-}
-
-.slot .vazio{
-  flex-wrap: wrap;
-  align-content: center;
+#user main h3{
+  margin-top: 0;
+  margin-bottom: .5em;
   text-align: center;
-  justify-content: center;
 }
 
-.slot .vazio span{
-  background-color: #00bcd4;
-  color: white;
-  padding: 5px;
-  border-radius: 2.5px;
-  font-size: 1.15em;
+.left{
   font-weight: bold;
 }
 
-.slot .vazio span:hover{
-  cursor: pointer;
+.btn{
+  background-color: #ff4343;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .5em;
+
+  width: 6em;
+  height: 1.25em;
+  margin: 0 auto;
+
+  color: white;
+  border-radius: 5px;
+  border: 1px solid #e61919;
 }
 
-.slot .vazio span:active{
-  filter: brightness(0.95);
+.btn img{
+  width: 1em;
+  margin-right: .5em;
 }
-
-#slots .slot .vazio h2{
-  font-size: 1.5em;
-  margin-bottom: .25em;
-}
-
-#abrirSaveBtn{display: none;}

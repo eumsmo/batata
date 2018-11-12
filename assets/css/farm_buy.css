@@ -26,29 +26,6 @@
   }
 }
 
-.close{
-  position: absolute;
-  right: -.75em; top: -.5em;
-  width: 2em;
-  height: 2em;
-
-  font-family: cursive;
-  font-size: large;
-
-  border-radius: 50%;
-  background-color: #F44336;
-  text-align: center;
-  line-height: 2em;
-  color: white;
-
-  transition: ease 1s, filter ease .1s;
-  opacity: 1;
-}
-
-.close:active{
-  filter: brightness(1.1);
-}
-
 #select > section{
   width: 100%;
   height: calc(100% - 3em);

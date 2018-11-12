@@ -25,6 +25,10 @@ function formatDate(date){
 
   return dia+'/'+mes+'/'+ano;
 }
+function milliToDays(milli){
+  let hours = milli/3600000;
+  return (hours/24+'').slice(0,3);
+}
 function moneyFormat(val){return val.toFixed(2)}
 
 // Carregar templates usando template.js
@@ -39,7 +43,7 @@ TEMP.setFolder("assets/templates")
 });
 
 // Inicializar variaveis
-let farm, upgrades, user, tempo, loja, display, caixa, save;
+let farm, upgrades, user, tempo, loja, display, caixa, save, profile;
 let all; //Objeto aponta para todas variaveis
 
 // Estrutura de uma terra plantada
@@ -677,7 +681,7 @@ class User{
     this.selected = "none";
     this.armazem = {};
     this.dataInicio = Date.now();
-    this.nome = "teste";
+    this.nome = "Fazendeiro Comum";
 
     for(let batata in InfoBatatas)
       this.armazem[batata] = this.armazem[batata]||0;
@@ -757,6 +761,7 @@ class User{
     this.nome = obj.nome;
     this.dataInicio = obj.inicio;
 
+    profile.nomeEl.innerHTML = this.nome;
     caixa.updateDOM();
   }
   exportObj(){
@@ -815,7 +820,7 @@ class Save {
       farm: farm.exportObj()
     }
 
-
+    profile.update(obj.user);
     // Update localStorage
     obj = JSON.stringify(obj);
     localStorage.setItem('slot-'+slot,obj);
@@ -881,6 +886,45 @@ class Save {
     }
   }
 }
+class Profile {
+  constructor(){
+    this.el = document.querySelector("#user");
+    this.modal = new Modal(this.el);
+    this.modal.openEl("#abrirUserBtn");
+    this.modal.closeEl("#user .close");
+    //this.container = this.el.querySelector("main");
+
+    this.resetBtn = document.querySelector("#resetBtn");
+    this.resetBtn.addEventListener("click",this.resetClickEvt.bind(this));
+
+    this.criacaoEl = document.querySelector("#criacao");
+    this.vividoEl = document.querySelector("#vividos");
+    this.dinheiroEl = document.querySelector("#didinheiro");
+
+    this.nomeEl = document.querySelector("#nome");
+    this.nomeEl.innerHTML = user.nome;
+    this.nomeEl.addEventListener("input",this.nomeChangeEvt.bind(this));
+  }
+
+  resetClickEvt(){
+    let alerta = "Você deseja apagar todo seu progresso no jogo?\n(Atenção! Essa ação é irreversível.)";
+    if(window.confirm(alerta)){
+      tempo.callbacks = [];
+      save.deleteData(0);
+      window.location.reload();
+    }
+  }
+
+  nomeChangeEvt(){
+    user.nome = this.nomeEl.innerHTML;
+  }
+
+  update(obj){
+    this.criacaoEl.innerHTML = formatDate(obj.inicio);
+    this.vividoEl.innerHTML = milliToDays(Date.now() - obj.inicio) + " dias";
+    this.dinheiroEl.innerHTML = "R$ "+moneyFormat(obj.money);
+  }
+}
 
 function main(){
   save = new Save();
@@ -891,7 +935,8 @@ function main(){
   user = new User();
   upgrades = new Upgrades();
   farm = new Farm();
-  all = {farm, upgrades, user, tempo, loja, display, caixa, save};
+  profile = new Profile();
+  all = {farm, upgrades, user, tempo, loja, display, caixa, save, profile};
 
   loja.updateAll("counter");
   user.moneyUpdate();

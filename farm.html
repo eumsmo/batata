@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="assets/css/farm_buy.css">
     <link rel="stylesheet" href="assets/css/farm_information.css">
     <link rel="stylesheet" href="assets/css/farm_items.css">
+    <link rel="stylesheet" href="assets/css/farm_save.css">
     <link rel="stylesheet" href="assets/css/farm_user.css">
   </head>
   <body>
@@ -22,16 +23,35 @@
         <section id="selecionada">
           <span></span>
         </section>
+
+        <!-- WORK IN PROGRESS -->
         <section id="slots" class="modal hide">
           <span class="close">X</span>
           <header>
             <h2>Save Slots</h2>
           </header>
           <main>
-
-
           </main>
         </section>
+        <!-- WORK IN PROGRESS -->
+
+        <section id="user" class="modal hide">
+          <span class="close">X</span>
+          <header>
+            <span class="img"></span>
+            <h2 id="nome" contenteditable>Fazendeiro Comum</h2>
+          </header>
+          <main>
+            <h3>Recomeçar do zero?</h3>
+            <span class="btn" id="resetBtn"><img src="assets/img/white-trash.png">Resetar!</span>
+            <section id="informacoes">
+              <p><span class="left">Inicio da fazenda:</span> <span class="right" id="criacao">11/11/2018</span></p>
+              <p><span class="left">Tempo:</span> <span class="right" id="vividos">0 dias</span></p>
+              <p><span class="left">Dinheiros:</span> <span class="right" id="didinheiro">R$ 598.58</span></p>
+            </section>
+          </main>
+        </section>
+
         <div id="caixa" class="modal hide">
           <header>
             <span class="close">X</span>
@@ -53,7 +73,7 @@
         </footer>
       </section>
 
-      <div id="select" class="modal selectBatata">
+      <div id="select" class="modal hide selectBatata">
         <span class="close">X</span>
         <header>
           <span class="selectBatata">Batatas</span>

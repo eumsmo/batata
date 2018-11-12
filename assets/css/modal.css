@@ -4,8 +4,37 @@
   transform: translateX(-50%) translateY(-50%);
   z-index: 9;
   transition: left ease .5s;
+  box-shadow: 0 0 60px 10px rgba(0, 0, 0, 0.25);
 }
 
 .modal.hide{
   left: -100%;
+}
+
+.close{
+  position: absolute;
+  right: -.75em; top: -.5em;
+  width: 2em;
+  height: 2em;
+  z-index: 99;
+
+  font-family: cursive;
+  font-size: large;
+
+  border-radius: 50%;
+  background-color: #F44336;
+  text-align: center;
+  line-height: 2em;
+  color: white;
+
+  transition: ease 1s, filter ease .1s;
+  opacity: 1;
+}
+
+.close:active{
+  filter: brightness(1.1);
+}
+
+.close:hover{
+  cursor: pointer;
 }
