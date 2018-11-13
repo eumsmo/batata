@@ -134,6 +134,7 @@ h1{
 
 #main > main{
   display: flex;
+  flex-direction: column;
 }
 
 #main header{

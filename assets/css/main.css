@@ -1,0 +1,78 @@
+/*.motivo::before{
+    content: "(";
+}
+
+.motivo::after{
+    content: ")";
+}*/
+
+.nome{
+    font-weight: bold;
+    color: black;
+
+}
+
+.autor{
+    width: 20em;
+    /*height: 20em;*/
+    border-radius: 1em;
+    text-align: center;
+    border: 1px solid black;
+
+    padding: 1em;
+    box-sizing: border-box;
+
+    
+    background-position: center;
+    background-size: cover;
+
+    color: white;
+    position: relative;
+
+    margin: 1em;
+}
+
+.autor *{
+    position: relative;
+    z-index: 2;
+}
+
+.autor::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, .25);
+    border-radius: 1em;
+    z-index: 1;
+    pointer-events: none;
+}
+
+#isabella{
+    background-image: url("../img/sonserina.jpg");
+}
+
+#juan, #marcus{
+    background-image: url("../img/corvinal.jpg");
+    background-position: bottom;
+    color: white;
+}
+
+.autor h2{
+}
+
+.frase{
+    font-size: 1.25em;
+}
+
+.autor p:not(.frase){
+    font-size: .9em;
+}
+
+#autores{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
