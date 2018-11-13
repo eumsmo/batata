@@ -1,0 +1,29 @@
+#receitas{
+    flex-wrap: wrap;
+}
+
+.receita, .receita_e{
+    
+}
+
+p{
+    font-size: 18px;
+    /*padding: 0.5em;*/
+  }
+  .img_esq{
+    display: inline;
+    width: 100%;
+  }/*
+  .list{
+    margin-left: 50px;
+  }*/
+  
+  .receita{
+    float: right;
+    margin-bottom: 5em;
+  }
+  .receita_e{
+    float: left;
+    clear: both;
+    margin-bottom: 5em;
+  }
