@@ -6,6 +6,20 @@
     
 }
 
+body.print .sidebar, body.print #btn, body.print main > header, body.print #receitas > *:not(.print){
+  display: none;
+}
+
+body.print #receitas{
+  padding: 0;
+}
+
+body.print #receitas .print{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 p{
     font-size: 18px;
     /*padding: 0.5em;*/

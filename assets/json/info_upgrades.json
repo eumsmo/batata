@@ -4,15 +4,27 @@
     "img": "potatoes.png",
     "preco": 0,
     "if": "${user.money} <= 0",
+    "starts": true,
     "exec": {
-      "user": {"$money": 1}
-    }
+      "user": {"money": 1}
+    },
+    "show": ["Clube dos cinco"]
   },
   "Clube dos cinco": {
     "descricao": "Quando você cresce o coração morre, mas a batata não.",
     "img": "potatoes.png",
     "preco": 555.5,
     "if": "${farm.size} <= 4",
+    "exec": {
+      "farm":{"$xSize": 1,"$ySize": 1,"fill": []}
+    },
+    "show": ["Hail Satan"]
+  },
+  "Hail Satan": {
+    "descricao": "Toda batata vem com um sacrifício, sacrifício humano.",
+    "img": "potatoes.png",
+    "preco": 6663.33,
+    "if": "${farm.size} <= 5",
     "exec": {
       "farm":{"$xSize": 1,"$ySize": 1,"fill": []}
     }

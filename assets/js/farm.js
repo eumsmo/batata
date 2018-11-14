@@ -78,7 +78,7 @@ class Farm{
     this.fill(4,4); // Inicia area de plantio
   }
 
-// Atualiza DOM
+    // Atualiza DOM
   updateDOM(){
 
     // Atualiza cada terra do DOM
@@ -339,6 +339,7 @@ class Upgrades{
       this.all[name]=true;
       user.addUpgrade(name);
       this.exec(name);
+      this.showImport(name);
       return true;
     }
     return false;
@@ -347,9 +348,11 @@ class Upgrades{
     if(!this.can(name)) return;
     let upgrade = InfoUpgrades[name],
         func = upgrade.exec;
+    
 
     for (let where in func){
       let cause = func[where], place = all[where];
+      console.log(where);
       for(let effect in cause){
         let val = cause[effect];
         if(place[effect] && place[effect].constructor == Function){
@@ -375,6 +378,18 @@ class Upgrades{
       else part[effects]();
     }*/
 
+  }
+
+  show(upgrade){
+    console.log(upgrade);
+    let el = loja.upgradesEl[upgrade];
+    el.classList.add("show");
+  }
+
+  showImport(upgrade){
+    let show = InfoUpgrades[upgrade].show;
+    if(show)
+    show.forEach(this.show);
   }
 }
 
@@ -451,8 +466,10 @@ class Loja{
     await el.remove(); // elemento.remove() não é sincrona e não possui callback! É necessário assim esperar
     delete this.upgradesEl[upgrade];
 
-    if(JSON.stringify(this.upgradesEl) == "{}")
+    if(JSON.stringify(this.upgradesEl) == "{}"){
+      this.noUpgradeEl.classList.add("show");
       this.buyUpgradeHolder.append(this.noUpgradeEl);
+    }
 
   }
 
@@ -486,6 +503,34 @@ class Loja{
   isOpen(){
     return !this.buyMenu.classList.contains("hide");
   }
+
+  appendUpgrade(upgrade, el){
+    this.buyUpgradeHolder.appendChild(el);
+    this.upgradesEl[upgrade] = el;
+  }
+  generateUpgrade(upgrade){
+    let info = InfoUpgrades[upgrade],
+        el = TEMP.render("upgrades",info,{
+          nome: upgrade,
+          preco:moneyFormat(info.preco)
+        });
+
+    let btn = el.querySelector(".comprarBt");
+
+    if(info.preco == 16){ // Ver se é um elemento em especifico
+      // Se sim, remove o botão e guarda elemento para o futuro
+      btn.remove();
+      el.querySelector('.informacao').style.marginRight = "0";
+      this.noUpgradeEl = el;
+    } else {
+      // Caso o contrário, segue normalmente
+      btn.addEventListener("click",()=>this.buyButtonClickEvt("upgrade",upgrade));
+      this.appendUpgrade(upgrade,el);
+      if(info.starts) el.classList.add("show");
+    }
+    return el;
+  }
+
   generateDOM(){
     let el;
     for (let batata in InfoBatatas){
@@ -501,28 +546,9 @@ class Loja{
       this.batatasEl[batata] = el;
     }
 
-    for(let upgrade in InfoUpgrades){
-      let info = InfoUpgrades[upgrade];
-      el = TEMP.render("upgrades",info,{
-        nome: upgrade,
-        preco:moneyFormat(info.preco)
-      });
-
-      let btn = el.querySelector(".comprarBt");
-
-      if(info.preco == 16){ // Ver se é um elemento em especifico
-        // Se sim, remove o botão e guarda elemento para o futuro
-        btn.remove();
-        el.querySelector('.informacao').style.marginRight = "0";
-        this.noUpgradeEl = el;
-      } else {
-        // Caso o contrário, segue normalmente
-        btn.addEventListener("click",()=>this.buyButtonClickEvt("upgrade",upgrade));
-
-        this.buyUpgradeHolder.appendChild(el);
-        this.upgradesEl[upgrade] = el;
-      }
-    }
+    for(let upgrade in InfoUpgrades)
+      this.generateUpgrade(upgrade);
+      
   }
   menuTabEvt(str){
     console.log(str);
@@ -756,6 +782,7 @@ class User{
       this.upgrades[i]=upgrade;
       loja.updateUpgrade(upgrade);
       upgrades.exec(upgrade);
+      upgrades.showImport(upgrade);
     });
 
     this.nome = obj.nome;
