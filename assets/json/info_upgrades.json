@@ -3,7 +3,7 @@
     "descricao": "Tá quebrado? Venha plantar batata com a gente!",
     "img": "potatoes.png",
     "preco": 0,
-    "if": "${user.money} <= 0",
+    "if": "${user.money} < 1",
     "starts": true,
     "exec": {
       "user": {"money": 1}
