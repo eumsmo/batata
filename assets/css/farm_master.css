@@ -8,8 +8,8 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: darkgrey;
-  outline: 1px solid slategrey;
+  background-color: rgba(128, 128, 128, 0.5);
+  outline: 1px solid rgb(128, 128, 128);
 }
 /*
 .wantToDrag:active{
