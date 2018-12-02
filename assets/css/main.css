@@ -14,15 +14,15 @@
 
 .autor{
     width: 20em;
-    /*height: 20em;*/
+    height: 20em;
     border-radius: 1em;
     text-align: center;
     border: 1px solid black;
 
-    padding: 1em;
+    padding: 1.5em;
     box-sizing: border-box;
 
-    
+
     background-position: center;
     background-size: cover;
 
@@ -30,11 +30,15 @@
     position: relative;
 
     margin: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .autor *{
     position: relative;
     z-index: 2;
+    margin: 0;
 }
 
 .autor::after{
