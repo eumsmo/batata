@@ -241,7 +241,7 @@ class Farm{
     this.forEach(el=>el.updateDOM());
     //this.updateDOM();
   }
-
+  
   // Ajusta tamanho da area de plantio
   fill(x,y){
     if(x!=undefined){

@@ -1,4 +1,5 @@
-let fazendaEl = document.querySelector("#fazenda");
+let fazendaEl = document.querySelector("#fazenda"),
+    fazendaConteudo  =document.querySelector("#fazenda > section");
 
 fazendaEl.addEventListener("wheel",e=>{
   //console.log(e);
@@ -8,8 +9,8 @@ fazendaEl.addEventListener("wheel",e=>{
 
 fazendaEl.scrollIntoView({block: "center", inline: "center"});
 
-const centerVertScroll = ()=> fazenda.clientHeight - fazendaEl.firstElementChild.scrollHeight/2;
-const centerHoriScroll = ()=> fazenda.clientWidth - fazendaEl.firstElementChild.scrollWidth/2;
+const centerVertScroll = ()=> fazenda.clientHeight - fazendaConteudo.scrollHeight/2;
+const centerHoriScroll = ()=> fazenda.clientWidth - fazendaConteudo.scrollWidth/2;
 const fazendaCenter = ()=> fazendaEl.scrollTo(centerHoriScroll(),centerVertScroll());
 
 window.addEventListener("resize",fazendaCenter);
