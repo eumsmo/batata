@@ -1,4 +1,5 @@
 ::-webkit-scrollbar {
+    height: .5em;
     width: .5em;
 }
 
@@ -10,7 +11,11 @@
   background-color: darkgrey;
   outline: 1px solid slategrey;
 }
-
+/*
+.wantToDrag:active{
+    cursor: grab;
+}
+*/
 body{
     margin: 0;
     background-color: green;
@@ -50,15 +55,36 @@ body > main{
   height: 300px/*100vh*/;
 }
 
+#fazenda{
+  width: 100%;
+  height: 100%;
+
+  overflow: auto;
+}
+
+#fazenda::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+#fazenda section{
+  width: 150%;
+  height: 150%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (orientation: landscape) {
   #farm{
     width: 70vh;
     height: 70vh;
   }
 
-  #abrirComprarBtn{
+  /*#abrirComprarBtn{
     display: none;
-  }
+  }*/
 
   .barra{
     font-size: 2.5vh;
@@ -80,10 +106,6 @@ body > main{
   height: 100%;
   width: 100%;
   position: relative;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 #opcoes{
@@ -146,7 +168,6 @@ body > main{
 }
 
 .terra.plantado.pronta{
-  cursor: move;
   cursor: grab;
 }
 
