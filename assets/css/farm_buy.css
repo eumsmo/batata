@@ -9,7 +9,7 @@
 }
 
 @media (orientation: landscape){
-  #select{
+  /*#select{
     top: 0; right: 0; left: unset;
     transform: unset;
     height: 100%;
@@ -23,7 +23,7 @@
 
   #conteudo{
     width: calc(100% - 400px);
-  }
+  }*/
 }
 
 #select > section{
