@@ -264,7 +264,7 @@ class Farm{
           return;
       }
   }
-=======
+//=======
 
   importObj(obj){
     if(obj==false) this.plantada=false;
@@ -310,7 +310,7 @@ class Farm{
     this.forEach(el=>el.updateDOM());
     //this.updateDOM();
   }
-  
+
   // Ajusta tamanho da area de plantio
   fill(x,y){
     if(x!=undefined){
@@ -332,7 +332,7 @@ class Farm{
           return;
       }
   }
->>>>>>> 56d1c4d9a4aebd16b953d9990a0c0613fdd611ad
+//>>>>>>> 56d1c4d9a4aebd16b953d9990a0c0613fdd611ad
   // Percorre terras
   forEach(callback){
     Farm.matrizForEach(this.arr,callback);
