@@ -196,7 +196,7 @@ class Terra{
       inicio: this.plantada.tempo.inicial
     };
   }
-<<<<<<< HEAD
+//<<<<<<< HEAD
 
   importObj(obj){
     if(obj==false) this.plantada=false;
@@ -266,74 +266,7 @@ class Farm{
   }
 //=======
 
-  importObj(obj){
-    if(obj==false) this.plantada=false;
-    else this.plantada = new Batata(obj.tipo,obj.inicio);
-    this.updateDOM();
-  }
-
-}
-
-class Farm{
-  constructor(){
-    this.arr = []; // Vetor com objetos sobre cada terra
-
-    // Tamanho da area de plantio (sempre x = y)
-    this.xSize;
-    this.ySize;
-    this.size;
-
-
-    this.farmEl = document.querySelector("#farm"); // Elemento HTML da area de plantio
-    tempo.add(this.updateTime.bind(this)); // Adiciona função de atualizar terras ao cronômetro*
-    this.fill(4,4); // Inicia area de plantio
-  }
-
-  // Reseta o conteudo da area de plantio (DOM)
-  resetDOM(){
-    let x = this.xSize,
-        y = this.ySize;
-
-    this.farmEl.innerHTML = ""; // Limpa o conteudo da area de plantio
-    this.arr = []; // Limpa o vetor de elementos
-
-    for(let i=0;i<x;i++){
-      this.arr[i] = []; // Inicia matriz
-      for(let j=0;j<y;j++){
-        this.arr[i][j] = new Terra();
-        this.farmEl.append(this.arr[i][j].el);
-      }
-    }
-
-    this.farmEl.style.gridTemplateColumns = `repeat(${x},${100/x}%)`;
-    this.farmEl.style.gridTemplateRows = `repeat(${y}),${100/y}%`;
-    this.forEach(el=>el.updateDOM());
-    //this.updateDOM();
-  }
-
-  // Ajusta tamanho da area de plantio
-  fill(x,y){
-    if(x!=undefined){
-      // Atualiza propriedades xSize e ySize (sempre x = y)
-      this.xSize = x;
-      this.ySize = y;
-    }
-    this.size = this.xSize;
-
-    this.resetDOM(); // Atualiza o DOM
-  }
-
-  static matrizForEach(matriz,call){
-    for(let i=0;i<matriz.length;i++)
-      for(let j=0;j<matriz[i].length;j++){
-        // Chama callback com os parametros
-        // Se callback retornar falso, termina forEach
-        if(call(matriz[i][j],i,j)===false)
-          return;
-      }
-  }
-//>>>>>>> 56d1c4d9a4aebd16b953d9990a0c0613fdd611ad
-  // Percorre terras
+// Percorre terras
   forEach(callback){
     Farm.matrizForEach(this.arr,callback);
   }
@@ -344,17 +277,17 @@ class Farm{
     this.forEach(el=> el.updateTime());
   }
 
-  // Função de importar valores
+// Função de importar valores
   importObj(obj){
 
-    this.fill(this.xSize,this.ySize);
+  this.fill(this.xSize,this.ySize);
 
-    Farm.matrizForEach(obj.arr,(terra,i,j)=>{
-      let nObj = (terra)? {tipo: terra.tipo, inicio: terra.inicio || terra.tempo.inicial} : false;
-      this.arr[i][j].importObj(nObj);
-    });
+  Farm.matrizForEach(obj.arr,(terra,i,j)=>{
+    let nObj = (terra)? {tipo: terra.tipo, inicio: terra.inicio || terra.tempo.inicial} : false;
+    this.arr[i][j].importObj(nObj);
+  });
 
-  }
+}
 
   // Função de exportar valores
   exportObj(){
@@ -367,6 +300,7 @@ class Farm{
 
     return {arr};
   }
+
 }
 
 class Upgrades{
