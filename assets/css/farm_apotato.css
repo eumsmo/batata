@@ -1,0 +1,69 @@
+#apotato{
+    width: 90%;
+    max-width: 400px;
+    height: 80%;
+    display: block;
+  
+    font-family: 'Roboto Mono', monospace;
+    font-size: large;
+    background-color: #545454;
+  }
+
+  #apotato header{
+      height: 40%;
+      width: 100%;
+      background-color: #3c2626;
+      box-sizing: border-box;
+
+      display: flex;
+      align-items: center;
+      padding: 1em;
+      flex-direction: column;
+      overflow: auto;
+  }
+
+  .sacrificio{
+    width: 16.66em;
+    height: 8em;
+    background-color: white;
+    border-radius: 1em;
+    padding: .6em;
+
+    display: inline-block;
+    box-sizing: border-box;
+    position: relative;
+    margin-bottom: 2.5em; 
+  }
+
+  .sacrificio h2{
+      margin: 0;
+      text-align: center;
+  }
+
+  .sacrificio img{
+      width: 4em;
+      height: 4em;
+      margin-right: 1em;
+  }
+
+  .sacrificio main{
+      display: flex;
+      align-items: center;
+  }
+
+  .sacrificio p {
+      margin: 0;
+      font-size: 1.2vh;
+  }
+
+  .doneit{
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translate(-50%, 75%);
+      padding: 4px;
+      background-color: #b50202;
+      border-radius: 5px;
+
+      color: white;
+      text-align: center;
+  }

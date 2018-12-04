@@ -196,7 +196,7 @@ class Terra{
       inicio: this.plantada.tempo.inicial
     };
   }
-//<<<<<<< HEAD
+
 
   importObj(obj){
     if(obj==false) this.plantada=false;
@@ -264,9 +264,9 @@ class Farm{
           return;
       }
   }
-//=======
 
-// Percorre terras
+
+  // Percorre terras
   forEach(callback){
     Farm.matrizForEach(this.arr,callback);
   }
@@ -277,7 +277,7 @@ class Farm{
     this.forEach(el=> el.updateTime());
   }
 
-// Função de importar valores
+  // Função de importar valores
   importObj(obj){
 
   this.fill(this.xSize,this.ySize);
@@ -287,7 +287,7 @@ class Farm{
     this.arr[i][j].importObj(nObj);
   });
 
-}
+  }
 
   // Função de exportar valores
   exportObj(){
