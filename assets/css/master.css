@@ -61,7 +61,7 @@ h1{
   margin-left: 0;
 }
 
-.showbar main{
+.showbar #main{
   margin-left: 15em;
   filter: brightness(0.85);
 }
@@ -102,7 +102,7 @@ h1{
   border-radius: 5px;
   box-sizing: border-box;
   background-color: rgba(255, 255, 255, 0.75);
-  
+
 
   display: inline-flex;
   flex-direction: column;
