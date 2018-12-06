@@ -246,6 +246,55 @@ body > main{
   top: -50%;
   font-size: 75%;
   font-weight: bold;
-  font-family: monospace;
+  font-family: 'Roboto Mono', monospace;
   color: white;
+}
+
+#mensagem{
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 80%;
+  font-size: 3vh;
+
+  background-color: white;
+  box-sizing: border-box;
+  box-shadow: 0 0 0 100vh rgb(0, 0, 0, 0.25);
+  z-index: 99;
+
+  padding: 1em;
+
+  /*display: flex;*/
+  display: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-family: 'Roboto Mono', monospace;
+}
+
+#mensagem .botao{
+  display: inline-block;
+  margin: 0 auto;
+
+  background-color: white;
+  padding: .25em;
+
+  border: 1px solid black;
+}
+
+#mensagem .botao:hover{
+  cursor: pointer;
+}
+
+#mensagem .botao:active{
+  transform: scale(0.95);
+}
+
+#mensagem .close{
+  background-color: unset;
+  color: black;
+  font-size: 1.05em;
+  right: .25em;
+  top: -.5em;
+  width: unset;
+  filter: none;
 }
