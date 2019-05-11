@@ -19,9 +19,11 @@ Batata:
 
 class Batata {
   // Batata(Date data_plantio)
-  constructor(data_plantio){
+  // Batata( )
+  constructor(data_plantio=null){
     this.data_plantio = data_plantio;
     this.elemento = this.constructor.gerarElemento();
+    this._vendida = false;
   }
 
   static get diretorio_base(){return "assets/img/"};
@@ -32,13 +34,21 @@ class Batata {
   static get retorno(){return 1.5}
   static get duracao(){return 10}
 
-  // boolean estaPronta( )
+  // public boolean estaPronta( )
   estaPronta(){return Date.now() >= this.tempoFinal}
 
-  // int getTempoFinal( )
+  // public int getTempoFinal( )
   get tempoFinal(){return this.data_plantio+this.constructor.duracao}
 
-  // static DOM gerarElemento( )
+  // public double vender( )
+  vender(){
+    if(this.estaPronta() && !this._vendida){
+      this._vendida = true;
+      return this.constructor.retorno;
+    }
+  }
+
+  // static public DOM gerarElemento( )
   static gerarElemento(){
     let imagem = document.createElement("img");
     imagem.classList.add("batata");

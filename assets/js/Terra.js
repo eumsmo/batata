@@ -5,7 +5,9 @@ Terra:
     - DOM: elementos{}
 
   Métodos:
-    - Terra(Batata)
+    - Terra(Batata batata)
+    - Terra(Batata batata, Usuario usuario)
+    - Terra(Usuario usuario)
     - Terra( )
     - boolean: estaPlantada( )
     - void: plantarBatata(Batata)
@@ -15,12 +17,23 @@ Terra:
 */
 
 // import Batata;
+// import Usuario;
+// import Date;
 
 class Terra {
-  // Terra(Batata batata) ou Terra( )
-  constructor(batata=null) {
+  // Terra(Batata batata)
+  // Terra(Batata batata, Usuario usuario)
+  // Terra(Usuario usuario)
+  // Terra( )
+  constructor(...args) {
     this.elementos = this.constructor.gerarElemento();
-    this.batata_plantada = batata;
+    this.elementos.terra.addEventListener("click",this._eventoClique.bind(this));
+
+    if(args[0] instanceof Batata){
+      this.plantarBatata(args[0]);
+      if(args[1] instanceof Usuario) this.usuario = args[1];
+    } else if(args[0] instanceof Usuario) this.usuario = args[0];
+
   }
 
   // boolean estaPlantada()
@@ -34,6 +47,9 @@ class Terra {
     this.elementos.batata = batata.elemento;
     this.elementos.terra.appendChild(batata.elemento);
     this.elementos.terra.classList.add("plantado");
+
+    if(batata.data_plantio==null)
+      batata.data_plantio = Date.now();
   }
 
   // void deletarBatata()
@@ -84,6 +100,7 @@ class Terra {
 
   // private void eventoClique(Event evento)
   _eventoClique(evento){
+    if(this.usuario) this.usuario.executarAcao(this);
 
   }
 
