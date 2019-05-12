@@ -56,7 +56,10 @@ class IArmazem extends Armazem {
           this.slots[construtor] = new IItemSlot(sem_interface.construtor,sem_interface.length);
 
       com_interface.usuario = this.usuario;
+      com_interface.pai = this;
       this.el.appendChild(com_interface.elementos.item);
     }
   }
+
+  close(){this.modal.close();}
 }

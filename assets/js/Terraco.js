@@ -55,5 +55,15 @@ class Terraco {
     }
   }
 
+  // public void atualizar(int: agora)
+  atualizar(agora){
+    for(let i=0; i< this.tamanho; i++){
+      for(let j=0; j< this.tamanho; j++){
+        let terra = this.terras[i][j];
+        terra.atualizar(agora);
+      }
+    }
+  }
+
 
 }

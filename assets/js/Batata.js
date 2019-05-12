@@ -11,7 +11,7 @@ Batata:
   Métodos:
     - Batata(Date)
     - boolean: estaPronta( )
-    - int: getTempoFinal()
+    - int: getTempo_final()
     - static DOM: gerarElemento( )
 */
 
@@ -35,10 +35,10 @@ class Batata {
   static get duracao(){return 10}
 
   // public boolean estaPronta( )
-  estaPronta(){return Date.now() >= this.tempoFinal}
+  estaPronta(){return Date.now() >= this.tempo_final}
 
-  // public int getTempoFinal( )
-  get tempoFinal(){return this.data_plantio+this.constructor.duracao}
+  // public int getTempo_final( )
+  get tempo_final(){return this.data_plantio+this.constructor.duracao*1000}
 
   // public double vender( )
   vender(){

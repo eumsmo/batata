@@ -60,6 +60,7 @@ class Terra {
       this.batata_plantada = null;
 
       this.elementos.terra.classList.remove("plantado");
+      this.elementos.terra.classList.remove("pronta");
     }
   }
 
@@ -89,7 +90,7 @@ class Terra {
       terra.classList.add("pronta");
     } else {
       barra.style.width = porcentagem+"%";
-      indicador.innerHTML = this.constructor.formatarHora(time.final,-agora);
+      indicador.innerHTML = this.constructor.formatarHora(final-agora);
     }
   }
 
@@ -113,7 +114,7 @@ class Terra {
 
 
     progresso_barra.classList.add("progresso");
-    progresso_indicador.classList.add("indicado");
+    progresso_indicador.classList.add("indicador");
 
     progresso_container.classList.add("barra");
     progresso_container.appendChild(progresso_barra);

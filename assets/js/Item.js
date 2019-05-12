@@ -38,6 +38,7 @@ class IItemSlot extends ItemSlot {
     super(construtor,quant);
 
     this.usuario = null;
+    this.pai = null;
 
     let img = construtor.diretorio_imagem? construtor.diretorio_imagem: "moeda.png";
     this.elementos = this.constructor.gerarElemento(img, quant);
@@ -61,6 +62,7 @@ class IItemSlot extends ItemSlot {
 
   _eventoClique(){
     if(this.usuario) this.usuario.executarAcao(this);
+    if(this.pai) this.pai.close();
   }
 
 
