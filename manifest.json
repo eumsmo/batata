@@ -1,0 +1,13 @@
+{
+	"short_name": "Batata Feliz",
+	"name": "Batata Feliz",
+	"icons": [
+	 {
+    	"src": "assets/img/dirt.png",
+    	"type": "image/png",
+    	"sizes": "320x320"
+  	}],
+  	"start_url": "farm.html",
+  	"background_color": "green",
+  	"display": "standalone"
+}
